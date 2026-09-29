@@ -1,0 +1,723 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-tldeq5d5><head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Astro Blog" href="https://example.com/rss.xml"><meta name="generator" content="Astro v7.3.2"><style>@font-face{font-family:Atkinson-c7f4c4e8b285552f;src:url("/_astro/fonts/89758defcfa85239.woff") format("woff");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Atkinson-c7f4c4e8b285552f;src:url("/_astro/fonts/14aa8dd5744dd4bc.woff") format("woff");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Atkinson-c7f4c4e8b285552f fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:99.3717%;ascent-override:80.1033%;descent-override:25.2587%;line-gap-override:0%;}@font-face{font-family:"Atkinson-c7f4c4e8b285552f fallback: Arial Bold";src:local("Arial Bold");font-display:swap;font-weight:700;font-style:normal;size-adjust:92.2954%;ascent-override:86.2448%;descent-override:27.1953%;line-gap-override:0%;}:root{--font-atkinson:Atkinson-c7f4c4e8b285552f,"Atkinson-c7f4c4e8b285552f fallback: Arial","Atkinson-c7f4c4e8b285552f fallback: Arial Bold",sans-serif;}</style><link rel="preload" href="/_astro/fonts/89758defcfa85239.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/_astro/fonts/14aa8dd5744dd4bc.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://example.com/blog/second-post/"><!-- Primary Meta Tags --><title>Week 2</title><meta name="description" content><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://example.com/blog/second-post/"><meta property="og:title" content="Week 2"><meta property="og:description" content><meta property="og:image" content="https://example.com/_astro/blog-placeholder-1.Bx0Zcyzv.jpg"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><style>:root{--accent:#2337ff;--accent-dark:#000d8a;--black:15, 18, 25;--gray:96, 115, 159;--gray-light:229, 233, 240;--gray-dark:34, 41, 57;--gray-gradient:rgba(var(--gray-light), 50%), #fff;--box-shadow:0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%)}body{font-family:var(--font-atkinson);text-align:left;background:linear-gradient(var(--gray-gradient)) no-repeat;word-wrap:break-word;overflow-wrap:break-word;color:rgb(var(--gray-dark));background-size:100% 600px;margin:0;padding:0;font-size:20px;line-height:1.7}main{width:720px;max-width:calc(100% - 2em);margin:auto;padding:3em 1em}h1,h2,h3,h4,h5,h6{color:rgb(var(--black));margin:0 0 .5rem;line-height:1.2}h1{font-size:3.052em}h2{font-size:2.441em}h3{font-size:1.953em}h4{font-size:1.563em}h5{font-size:1.25em}strong,b{font-weight:700}a,a:hover{color:var(--accent)}p{margin-bottom:1em}.prose p{margin-bottom:2em}textarea{width:100%;font-size:16px}input{font-size:16px}table{width:100%}img{border-radius:8px;max-width:100%;height:auto}code{background-color:rgb(var(--gray-light));border-radius:2px;padding:2px 5px}pre{border-radius:8px;padding:1.5em}pre>code{all:unset}blockquote{border-left:4px solid var(--accent);margin:0;padding:0 0 0 20px;font-size:1.333em}hr{border:none;border-top:1px solid rgb(var(--gray-light))}@media (width<=720px){body{font-size:18px}main{padding:1em}}.sr-only{clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);clip-path:inset(50%);white-space:nowrap;border:0;width:1px;height:1px;margin:0;padding:0;overflow:hidden;position:absolute!important}footer[data-astro-cid-jo6i4kqk]{background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center;padding:2em 1em 6em}.social-links[data-astro-cid-jo6i4kqk]{justify-content:center;gap:1em;margin-top:1em;display:flex}.social-links[data-astro-cid-jo6i4kqk] a[data-astro-cid-jo6i4kqk]{color:rgb(var(--gray));text-decoration:none}.social-links[data-astro-cid-jo6i4kqk] a[data-astro-cid-jo6i4kqk]:hover{color:rgb(var(--gray-dark))}a[data-astro-cid-evkijfd6]{text-decoration:none;display:inline-block}a[data-astro-cid-evkijfd6].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-nen7h5rs]{box-shadow:0 2px 8px rgba(var(--black), 5%);background:#fff;margin:0;padding:0 1em}h2[data-astro-cid-nen7h5rs]{margin:0;font-size:1em}h2[data-astro-cid-nen7h5rs] a[data-astro-cid-nen7h5rs],h2[data-astro-cid-nen7h5rs] a[data-astro-cid-nen7h5rs].active{text-decoration:none}nav[data-astro-cid-nen7h5rs]{justify-content:space-between;align-items:center;display:flex}nav[data-astro-cid-nen7h5rs] a[data-astro-cid-nen7h5rs]{color:var(--black);border-bottom:4px solid #0000;padding:1em .5em;text-decoration:none}nav[data-astro-cid-nen7h5rs] a[data-astro-cid-nen7h5rs].active{border-bottom-color:var(--accent);text-decoration:none}.social-links[data-astro-cid-nen7h5rs],.social-links[data-astro-cid-nen7h5rs] a[data-astro-cid-nen7h5rs]{display:flex}@media (width<=720px){.social-links[data-astro-cid-nen7h5rs]{display:none}}
+.author-bio[data-astro-cid-xkziw7dw]{border-top:1px solid rgb(var(--gray-light));align-items:flex-start;gap:1.25rem;margin-top:3rem;padding-top:2rem;display:flex}.avatar[data-astro-cid-xkziw7dw]{object-fit:cover;border-radius:50%;flex:none;width:96px;height:96px}.author-details[data-astro-cid-xkziw7dw] h2[data-astro-cid-xkziw7dw],.author-details[data-astro-cid-xkziw7dw] p[data-astro-cid-xkziw7dw]{margin-top:0}.eyebrow[data-astro-cid-xkziw7dw]{color:rgb(var(--gray));letter-spacing:.08em;text-transform:uppercase;margin-bottom:.25rem;font-size:.8em;font-weight:700}.author-details[data-astro-cid-xkziw7dw] ul[data-astro-cid-xkziw7dw]{gap:1rem;margin:0;padding:0;font-size:.9em;list-style:none;display:flex}@media (width<=520px){.author-bio[data-astro-cid-xkziw7dw]{gap:1rem}.avatar[data-astro-cid-xkziw7dw]{width:72px;height:72px}}main[data-astro-cid-tldeq5d5]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-tldeq5d5]{width:100%}.hero-image[data-astro-cid-tldeq5d5] img[data-astro-cid-tldeq5d5]{box-shadow:var(--box-shadow);border-radius:12px;margin:0 auto;display:block}.prose[data-astro-cid-tldeq5d5]{width:720px;max-width:calc(100% - 2em);color:rgb(var(--gray-dark));margin:auto;padding:1em}.title[data-astro-cid-tldeq5d5]{text-align:center;margin-bottom:1em;padding:1em 0;line-height:1}.title[data-astro-cid-tldeq5d5] h1[data-astro-cid-tldeq5d5]{margin:0 0 .5em}.date[data-astro-cid-tldeq5d5]{color:rgb(var(--gray));margin-bottom:.5em}.last-updated-on[data-astro-cid-tldeq5d5]{font-style:italic}
+</style></head><body data-astro-cid-tldeq5d5><header data-astro-cid-nen7h5rs><nav data-astro-cid-nen7h5rs><h2 data-astro-cid-nen7h5rs><a href="/" data-astro-cid-nen7h5rs>Astro Blog</a></h2><div class="internal-links" data-astro-cid-nen7h5rs><a href="/" data-astro-cid-nen7h5rs="true" data-astro-cid-evkijfd6>Home</a><a href="/blog" class="active" data-astro-cid-nen7h5rs="true" data-astro-cid-evkijfd6>Blog</a><a href="/about" data-astro-cid-nen7h5rs="true" data-astro-cid-evkijfd6>About</a></div><div class="social-links" data-astro-cid-nen7h5rs><a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-nen7h5rs><span class="sr-only" data-astro-cid-nen7h5rs>Follow Astro on Mastodon</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-nen7h5rs><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-nen7h5rs></path></svg></a><a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-nen7h5rs><span class="sr-only" data-astro-cid-nen7h5rs>Follow Astro on Twitter</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-nen7h5rs><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-nen7h5rs></path></svg></a><a href="https://github.com/withastro/astro" target="_blank" data-astro-cid-nen7h5rs><span class="sr-only" data-astro-cid-nen7h5rs>Go to Astro's GitHub repo</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-nen7h5rs><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-nen7h5rs></path></svg></a></div></nav></header><main data-astro-cid-tldeq5d5><article data-astro-cid-tldeq5d5><div class="hero-image" data-astro-cid-tldeq5d5><img src="/_astro/w2.aZME-heY_AP90r.webp" alt data-astro-cid-tldeq5d5="true" loading="lazy" decoding="async" width="1020" height="510"></div><div class="prose" data-astro-cid-tldeq5d5><div class="title" data-astro-cid-tldeq5d5><div class="date" data-astro-cid-tldeq5d5><time datetime="2026-09-19T23:00:00.000Z">Sep 20, 2026</time></div><h1 data-astro-cid-tldeq5d5>Week 2</h1><hr data-astro-cid-tldeq5d5></div><h1 id="cs4421-devops--week-2">CS4421: DevOps — Week 2</h1>
+<h2 id="agile-frameworks-collaborative-git--scm-platforms">Agile Frameworks, Collaborative Git &amp; SCM Platforms</h2>
+<hr>
+<h1 id="1-week-2-overview">1. Week 2 Overview</h1>
+<h3 id="block-1--agile--requirements">Block 1 — Agile &amp; Requirements</h3>
+<ul>
+<li>
+<p>Agile Manifesto</p>
+</li>
+<li>
+<p>Scrum:</p>
+<ul>
+<li>Roles</li>
+<li>Ceremonies</li>
+<li>Artifacts</li>
+<li>Definition of Done</li>
+</ul>
+</li>
+<li>
+<p>Requirements Engineering</p>
+</li>
+<li>
+<p>User Stories</p>
+</li>
+<li>
+<p>Acceptance Criteria</p>
+</li>
+</ul>
+<h3 id="block-2--tooling--architecture">Block 2 — Tooling &amp; Architecture</h3>
+<ul>
+<li>
+<p>Source Code Management (SCM) platforms</p>
+</li>
+<li>
+<p>GitHub vs GitLab vs Bitbucket</p>
+</li>
+<li>
+<p>Branching strategies:</p>
+<ul>
+<li>Trunk-Based / GitHub Flow</li>
+<li>GitFlow</li>
+</ul>
+</li>
+<li>
+<p>Pull Requests</p>
+</li>
+<li>
+<p>Code reviews</p>
+</li>
+<li>
+<p>3-way merge conflicts</p>
+</li>
+<li>
+<p>Astro Content Collections</p>
+</li>
+<li>
+<p>Zod schema validation</p>
+</li>
+</ul>
+<h3 id="block-3--practical-lab">Block 3 — Practical Lab</h3>
+<ul>
+<li>GitHub Project Board</li>
+<li>Kanban workflow</li>
+<li>Astro Content Collections</li>
+<li>Feature branches</li>
+<li><code>npm run check</code></li>
+<li>Merge conflict simulation</li>
+<li>Peer code reviews</li>
+</ul>
+<hr>
+<h1 id="2-agile-manifesto">2. Agile Manifesto</h1>
+<p>The Agile Manifesto was created in <strong>2001</strong>.</p>
+<p>Agile prioritises collaboration and working outcomes over rigid processes.</p>
+<h3 id="the-4-agile-values">The 4 Agile Values</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>More Important Than</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Individuals &amp; Interactions</strong></td>
+<td>Processes &amp; Tools</td>
+</tr>
+<tr>
+<td><strong>Working Software</strong></td>
+<td>Comprehensive Documentation</td>
+</tr>
+<tr>
+<td><strong>Customer Collaboration</strong></td>
+<td>Contract Negotiation</td>
+</tr>
+<tr>
+<td><strong>Responding to Change</strong></td>
+<td>Following a Plan</td>
+</tr>
+</tbody>
+</table>
+<h3 id="important-principle">Important Principle</h3>
+<p>The items on the right still have value.</p>
+<p>However, Agile places <strong>more value on the items on the left</strong>.</p>
+<hr>
+<h1 id="3-scrum-framework">3. Scrum Framework</h1>
+<p>Scrum is an Agile framework for organising software development.</p>
+<h2 id="3-core-scrum-roles">3 Core Scrum Roles</h2>
+<h3 id="product-owner-po">Product Owner (PO)</h3>
+<p>Responsible for <strong>what gets built</strong>.</p>
+<ul>
+<li>Defines priorities</li>
+<li>Owns the Product Backlog</li>
+</ul>
+<h3 id="scrum-master">Scrum Master</h3>
+<p>Facilitates the Scrum process.</p>
+<ul>
+<li>Removes team roadblocks</li>
+<li>Coaches the team in Agile practices</li>
+</ul>
+<h3 id="developers">Developers</h3>
+<p>Cross-functional engineers who:</p>
+<ul>
+<li>Design</li>
+<li>Build</li>
+<li>Test</li>
+<li>Ship software</li>
+</ul>
+<hr>
+<h1 id="4-scrum-artifacts">4. Scrum Artifacts</h1>
+<p>There are <strong>3 core Scrum artifacts</strong>.</p>
+<h2 id="product-backlog">Product Backlog</h2>
+<p>A prioritised list containing:</p>
+<ul>
+<li>Features</li>
+<li>Enhancements</li>
+<li>Fixes</li>
+</ul>
+<p>It represents the work that could potentially be done.</p>
+<h2 id="sprint-backlog">Sprint Backlog</h2>
+<p>A subset of the Product Backlog.</p>
+<p>Contains the user stories that the team commits to completing during the sprint.</p>
+<h2 id="increment">Increment</h2>
+<p>A potentially shippable slice of the product.</p>
+<p>The Increment must satisfy the <strong>Definition of Done (DoD)</strong>.</p>
+<hr>
+<h1 id="5-scrum-ceremonies">5. Scrum Ceremonies</h1>
+<p>There are <strong>4 main Scrum ceremonies/events</strong> covered in the slides.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Sprint Planning</span></span>
+<span class="line"><span>       ↓</span></span>
+<span class="line"><span>Daily Standup</span></span>
+<span class="line"><span>       ↓</span></span>
+<span class="line"><span>Sprint Review</span></span>
+<span class="line"><span>       ↓</span></span>
+<span class="line"><span>Sprint Retrospective</span></span>
+<span class="line"><span>       ↺</span></span></code></pre>
+<h2 id="1-sprint-planning">1. Sprint Planning</h2>
+<p>Determines:</p>
+<ul>
+<li>What will be worked on?</li>
+<li>How will the work be completed?</li>
+</ul>
+<p>The team estimates work and commits to a Sprint Backlog.</p>
+<h2 id="2-daily-standup">2. Daily Standup</h2>
+<p>Short meeting, typically around <strong>15 minutes</strong>.</p>
+<p>Questions:</p>
+<ul>
+<li>What did I do?</li>
+<li>What will I do today?</li>
+<li>Are there any blockers?</li>
+</ul>
+<h2 id="3-sprint-review">3. Sprint Review</h2>
+<p>A live demonstration of the product to stakeholders.</p>
+<p>Focuses on what was actually built.</p>
+<h2 id="4-sprint-retrospective">4. Sprint Retrospective</h2>
+<p>The team reflects on the development process.</p>
+<p>Goal:</p>
+<blockquote>
+<p>Identify bottlenecks and determine how the team can improve.</p>
+</blockquote>
+<p>The retrospective should be <strong>blameless</strong>.</p>
+<hr>
+<h1 id="6-requirements-engineering">6. Requirements Engineering</h1>
+<h2 id="user-stories">User Stories</h2>
+<p>A user story expresses a requirement from the <strong>end user’s perspective</strong>.</p>
+<h3 id="standard-format">Standard Format</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>As a &lt;type of user&gt;,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I want &lt;to perform some action / have some capability&gt;,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>So that &lt;I achieve a specific benefit&gt;.</span></span></code></pre>
+<h3 id="example">Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>As a tech blog reader,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I want to see author bios and avatars at the bottom of articles,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>So that I can learn about the writer and follow their work.</span></span></code></pre>
+<h3 id="key-structure">Key Structure</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>WHO?</span></span>
+<span class="line"><span>  ↓</span></span>
+<span class="line"><span>As a &lt;user&gt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>WHAT?</span></span>
+<span class="line"><span>  ↓</span></span>
+<span class="line"><span>I want &lt;capability&gt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>WHY?</span></span>
+<span class="line"><span>  ↓</span></span>
+<span class="line"><span>So that &lt;benefit&gt;</span></span></code></pre>
+<hr>
+<h1 id="7-acceptance-criteria">7. Acceptance Criteria</h1>
+<p>Acceptance Criteria (<strong>AC</strong>) define the conditions that must be satisfied for a user story to be considered complete.</p>
+<p>The slides use the <strong>Given → When → Then</strong> format.</p>
+<h2 id="given">Given</h2>
+<p>Describes the initial condition.</p>
+<h2 id="when">When</h2>
+<p>Describes the action/event.</p>
+<h2 id="then">Then</h2>
+<p>Describes the expected result.</p>
+<h3 id="example-1">Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Scenario: Displaying author profile</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Given an author profile exists in "src/content/authors/"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>When a user visits a blog post authored by that person</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Then the bottom of the article must render:</span></span>
+<span class="line"><span>- The author's avatar</span></span>
+<span class="line"><span>- The author's bio</span></span>
+<span class="line"><span>- Social links</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>And the image must have appropriate alt text.</span></span></code></pre>
+<hr>
+<h1 id="8-definition-of-done">8. Definition of Done</h1>
+<p>The <strong>Definition of Done (DoD)</strong> is a checklist of requirements that must be satisfied before work is considered complete.</p>
+<p>Example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>[ ] Code authored on feature branch</span></span>
+<span class="line"><span>[ ] Component tests pass locally</span></span>
+<span class="line"><span>[ ] Peer code review approved by a teammate</span></span>
+<span class="line"><span>[ ] Merged cleanly into main</span></span></code></pre>
+<h3 id="important-distinction">Important Distinction</h3>
+<p><strong>Acceptance Criteria</strong> = What the feature must do.</p>
+<p><strong>Definition of Done</strong> = What must be completed for the work to be considered finished.</p>
+<hr>
+<h1 id="9-source-code-management-scm-platforms">9. Source Code Management (SCM) Platforms</h1>
+<p>SCM platforms provide infrastructure around Git repositories and software development.</p>
+<h2 id="github">GitHub</h2>
+<h3 id="strengths">Strengths</h3>
+<ul>
+<li>Developer ecosystem</li>
+<li>Open source</li>
+<li>GitHub Actions</li>
+</ul>
+<h3 id="typical-use">Typical Use</h3>
+<ul>
+<li>Modern development teams</li>
+<li>Open-source projects</li>
+</ul>
+<h3 id="cicd">CI/CD</h3>
+<ul>
+<li>GitHub Actions</li>
+</ul>
+<hr>
+<h2 id="gitlab">GitLab</h2>
+<h3 id="strengths-1">Strengths</h3>
+<ul>
+<li>All-in-one DevOps lifecycle</li>
+<li>Self-hosting</li>
+</ul>
+<h3 id="typical-use-1">Typical Use</h3>
+<ul>
+<li>Enterprises requiring on-premise isolation</li>
+</ul>
+<h3 id="cicd-1">CI/CD</h3>
+<ul>
+<li>GitLab CI/CD</li>
+</ul>
+<hr>
+<h2 id="bitbucket">Bitbucket</h2>
+<h3 id="strengths-2">Strengths</h3>
+<ul>
+<li>Strong integration with Jira and Confluence</li>
+</ul>
+<h3 id="typical-use-2">Typical Use</h3>
+<ul>
+<li>Atlassian enterprise ecosystems</li>
+</ul>
+<h3 id="cicd-2">CI/CD</h3>
+<ul>
+<li>Bitbucket Pipelines</li>
+</ul>
+<hr>
+<h2 id="gitea--forgejo">Gitea / Forgejo</h2>
+<h3 id="strengths-3">Strengths</h3>
+<ul>
+<li>Lightweight</li>
+<li>Self-hosted</li>
+<li>Written in Go</li>
+</ul>
+<h3 id="typical-use-3">Typical Use</h3>
+<ul>
+<li>Small teams</li>
+<li>Air-gapped homelabs</li>
+</ul>
+<h3 id="cicd-3">CI/CD</h3>
+<ul>
+<li>External webhooks / Act Runner</li>
+</ul>
+<hr>
+<h1 id="10-branching-strategies">10. Branching Strategies</h1>
+<p>Two major strategies discussed:</p>
+<ul>
+<li>GitHub Flow / Trunk-Based</li>
+<li>GitFlow</li>
+</ul>
+<hr>
+<h1 id="11-github-flow--trunk-based-development">11. GitHub Flow / Trunk-Based Development</h1>
+<p>GitHub Flow is designed to be:</p>
+<ul>
+<li>Simple</li>
+<li>Fast</li>
+<li>Suitable for modern cloud development</li>
+</ul>
+<h3 id="structure">Structure</h3>
+<p>There is only <strong>one long-lived branch</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>main</span></span></code></pre>
+<p>Developers create short-lived feature branches:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>feat/bio</span></span></code></pre>
+<p>These branches are merged into <code>main</code> through <strong>Pull Requests</strong>.</p>
+<h3 id="example-2">Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>main</span></span>
+<span class="line"><span>●──────────────●──────────────●</span></span>
+<span class="line"><span> \            /</span></span>
+<span class="line"><span>  ●──●──●────</span></span>
+<span class="line"><span>     feature</span></span></code></pre>
+<h3 id="key-characteristics">Key Characteristics</h3>
+<ul>
+<li><code>main</code> remains deployable</li>
+<li>Feature branches are short-lived</li>
+<li>Changes go through Pull Requests</li>
+<li>Suitable for Continuous Deployment</li>
+</ul>
+<hr>
+<h1 id="12-gitflow">12. GitFlow</h1>
+<p>GitFlow uses a more complex branch hierarchy.</p>
+<p>Common branches include:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>master</span></span>
+<span class="line"><span>develop</span></span>
+<span class="line"><span>release/*</span></span>
+<span class="line"><span>hotfix/*</span></span></code></pre>
+<h3 id="typical-flow">Typical Flow</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>feature</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>develop</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>release/*</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>master</span></span></code></pre>
+<h3 id="intended-use">Intended Use</h3>
+<p>The slides associate GitFlow with:</p>
+<ul>
+<li>Boxed software</li>
+<li>Quarterly release cycles</li>
+</ul>
+<h3 id="github-flow-vs-gitflow">GitHub Flow vs GitFlow</h3>
+<table>
+<thead>
+<tr>
+<th>GitHub Flow</th>
+<th>GitFlow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple</td>
+<td>More complex</td>
+</tr>
+<tr>
+<td>One long-lived <code>main</code></td>
+<td>Multiple long-lived branches</td>
+</tr>
+<tr>
+<td>Short-lived feature branches</td>
+<td>Larger branch hierarchy</td>
+</tr>
+<tr>
+<td>Fast releases</td>
+<td>Release-based workflow</td>
+</tr>
+<tr>
+<td>Continuous deployment</td>
+<td>Scheduled releases</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="13-pull-requests">13. Pull Requests</h1>
+<p>A <strong>Pull Request (PR)</strong> is more than a button for merging code.</p>
+<p>It acts as an <strong>engineering quality gate and audit trail</strong>.</p>
+<p>A PR allows a team to:</p>
+<ul>
+<li>Review changes</li>
+<li>Discuss implementation</li>
+<li>Check requirements</li>
+<li>Identify bugs</li>
+<li>Verify quality</li>
+<li>Decide whether changes should be merged</li>
+</ul>
+<h3 id="example-pr-structure">Example PR Structure</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## Description</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Implements author bio card component as specified</span></span>
+<span class="line"><span style="color:#E1E4E8">in User Story #12.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Changes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Created </span><span style="color:#79B8FF">`src/components/authors/alex.md`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Added author schema validation</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Added responsive styling for mobile viewports</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Closes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Fixes #12</span></span></code></pre>
+<hr>
+<h1 id="14-code-review">14. Code Review</h1>
+<p>Code reviews protect production quality while supporting a <strong>blameless learning culture</strong>.</p>
+<h2 id="what-reviewers-look-for">What Reviewers Look For</h2>
+<h3 id="correctness">Correctness</h3>
+<ul>
+<li>Does the code work?</li>
+<li>Are edge cases handled?</li>
+</ul>
+<p>Example:</p>
+<blockquote>
+<p>What happens if an author has no avatar?</p>
+</blockquote>
+<h3 id="readability">Readability</h3>
+<ul>
+<li>Is the code easy to understand?</li>
+<li>Are names clear?</li>
+<li>Are conventions followed?</li>
+</ul>
+<h3 id="security">Security</h3>
+<p>Check for:</p>
+<ul>
+<li>Hardcoded secrets</li>
+<li>API keys</li>
+<li>Other sensitive information</li>
+</ul>
+<h3 id="performance--accessibility">Performance &amp; Accessibility</h3>
+<p>Check for issues such as:</p>
+<ul>
+<li>Missing <code>alt</code> attributes</li>
+<li>Heavy imports</li>
+<li>Poor performance</li>
+</ul>
+<hr>
+<h1 id="15-constructive-code-review">15. Constructive Code Review</h1>
+<p>Code reviews should be constructive rather than personal.</p>
+<h3 id="avoid">Avoid</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>"This code is messy."</span></span></code></pre>
+<h3 id="prefer">Prefer</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>"Could we extract this logic into a helper function?"</span></span></code></pre>
+<p>The focus should be on <strong>improving the code</strong>, not criticising the developer.</p>
+<hr>
+<h1 id="16-merge-conflicts">16. Merge Conflicts</h1>
+<p>A merge conflict occurs when two branches modify the <strong>same line of the same file in different ways</strong>, and Git cannot automatically determine which version should be used.</p>
+<h3 id="example-3">Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>&lt;p class="author-title"&gt;</span></span>
+<span class="line"><span>Senior Technical Writer</span></span>
+<span class="line"><span>&lt;/p&gt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>=======</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>&lt;p class="author-title"&gt;</span></span>
+<span class="line"><span>Principal Cloud Architect</span></span>
+<span class="line"><span>&lt;/p&gt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feat/author-update</span></span></code></pre>
+<p>Git is effectively saying:</p>
+<blockquote>
+<p>“I have two different versions of this section. You need to decide what the final version should be.”</p>
+</blockquote>
+<hr>
+<h1 id="17-resolving-a-merge-conflict">17. Resolving a Merge Conflict</h1>
+<h3 id="step-1--open-the-conflicted-file">Step 1 — Open the conflicted file</h3>
+<p>Use VS Code or another editor.</p>
+<h3 id="step-2--find-the-conflict-markers">Step 2 — Find the conflict markers</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span>
+<span class="line"><span>=======</span></span>
+<span class="line"><span>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span></span></code></pre>
+<h3 id="step-3--decide-what-the-final-code-should-be">Step 3 — Decide what the final code should be</h3>
+<p>You can:</p>
+<ul>
+<li>Keep the current version</li>
+<li>Keep the incoming version</li>
+<li>Combine both</li>
+<li>Rewrite the section</li>
+</ul>
+<h3 id="step-4--remove-the-conflict-markers">Step 4 — Remove the conflict markers</h3>
+<p>Delete:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span>
+<span class="line"><span>=======</span></span>
+<span class="line"><span>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span></span></code></pre>
+<h3 id="step-5--stage-the-resolved-file">Step 5 — Stage the resolved file</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> add</span><span style="color:#F97583"> &lt;</span><span style="color:#9ECBFF">fil</span><span style="color:#E1E4E8">e</span><span style="color:#F97583">&gt;</span></span></code></pre>
+<h3 id="step-6--complete-the-merge">Step 6 — Complete the merge</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> commit</span></span></code></pre>
+<hr>
+<h1 id="18-astro-content-collections">18. Astro Content Collections</h1>
+<p>Astro provides <strong>type-safe Content Collections</strong>.</p>
+<p>They use <strong>Zod</strong> for schema validation.</p>
+<p>The schema is defined in:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>src/content.config.ts</span></span></code></pre>
+<h3 id="example-4">Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { defineCollection } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> 'astro:content'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { z } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> 'astro/zod'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> blog</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> defineCollection</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  schema: z.</span><span style="color:#B392F0">object</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">    title: z.</span><span style="color:#B392F0">string</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">    pubDate: z.</span><span style="color:#B392F0">date</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">    author: z.</span><span style="color:#B392F0">string</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">  }),</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre>
+<hr>
+<h1 id="19-zod-schema-validation">19. Zod Schema Validation</h1>
+<p>Zod allows you to define what data your content must contain.</p>
+<p>For example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">title</span><span style="color:#E1E4E8">: z.</span><span style="color:#B392F0">string</span><span style="color:#E1E4E8">()</span></span></code></pre>
+<p>means:</p>
+<blockquote>
+<p><code>title</code> must be a string.</p>
+</blockquote>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">pubDate</span><span style="color:#E1E4E8">: z.</span><span style="color:#B392F0">date</span><span style="color:#E1E4E8">()</span></span></code></pre>
+<p>means:</p>
+<blockquote>
+<p><code>pubDate</code> must be a date.</p>
+</blockquote>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">author</span><span style="color:#E1E4E8">: z.</span><span style="color:#B392F0">string</span><span style="color:#E1E4E8">()</span></span></code></pre>
+<p>means:</p>
+<blockquote>
+<p><code>author</code> must be a string.</p>
+</blockquote>
+<h3 id="optional-tags-example">Optional Tags Example</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">tags</span><span style="color:#E1E4E8">: z.</span><span style="color:#B392F0">array</span><span style="color:#E1E4E8">(z.</span><span style="color:#B392F0">string</span><span style="color:#E1E4E8">()).</span><span style="color:#B392F0">default</span><span style="color:#E1E4E8">([])</span></span></code></pre>
+<p>This defines <code>tags</code> as an array of strings with an empty array as the default.</p>
+<hr>
+<h1 id="20-npm-run-check">20. <code>npm run check</code></h1>
+<p>Run:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> check</span></span></code></pre>
+<p>This runs <code>astro check</code> under the hood.</p>
+<p>It:</p>
+<ul>
+<li>Parses Markdown/MDX files</li>
+<li>Checks TypeScript types</li>
+<li>Validates frontmatter</li>
+<li>Checks content against Zod schemas</li>
+</ul>
+<h3 id="why-run-it">Why Run It?</h3>
+<p>It catches problems <strong>locally before they reach Git commits or Pull Requests</strong>.</p>
+<p>This is an example of <strong>shift-left</strong> engineering:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Find errors earlier</span></span>
+<span class="line"><span>       ↓</span></span>
+<span class="line"><span>Fix errors earlier</span></span>
+<span class="line"><span>       ↓</span></span>
+<span class="line"><span>Less expensive problems later</span></span></code></pre>
+<hr>
+<h1 id="21-github-project-board">21. GitHub Project Board</h1>
+<p>The Week 2 practical uses a Kanban board with:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Backlog</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>To Do</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>In Progress</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>Review</span></span>
+<span class="line"><span>   ↓</span></span>
+<span class="line"><span>Done</span></span></code></pre>
+<p>The lab requires:</p>
+<ul>
+<li>Creating the project board</li>
+<li>Adding active issues</li>
+<li>Creating user stories</li>
+<li>Adding acceptance criteria</li>
+</ul>
+<hr>
+<h1 id="22-week-2-practical-lab">22. Week 2 Practical Lab</h1>
+<h2 id="objective-1--github-project-board">Objective 1 — GitHub Project Board</h2>
+<p>Create a Kanban board containing:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Backlog</span></span>
+<span class="line"><span>To Do</span></span>
+<span class="line"><span>In Progress</span></span>
+<span class="line"><span>Review</span></span>
+<span class="line"><span>Done</span></span></code></pre>
+<p>Create <strong>2 GitHub Issues</strong> containing:</p>
+<ul>
+<li>User Story</li>
+<li>Acceptance Criteria</li>
+</ul>
+<hr>
+<h2 id="objective-2--astro-content-collections">Objective 2 — Astro Content Collections</h2>
+<p>Define schemas in:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>src/content.config.ts</span></span></code></pre>
+<p>Using Zod:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#E1E4E8">z.</span><span style="color:#B392F0">object</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">    title,</span></span>
+<span class="line"><span style="color:#E1E4E8">    author,</span></span>
+<span class="line"><span style="color:#E1E4E8">    pubDate</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span></code></pre>
+<p>Then:</p>
+<ul>
+<li>Create author profiles</li>
+<li>Create a new blog post</li>
+<li>Use Markdown/MDX</li>
+<li>Run <code>npm run check</code></li>
+</ul>
+<p>Goal:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>0 schema errors</span></span>
+<span class="line"><span>0 type errors</span></span></code></pre>
+<hr>
+<h2 id="objective-3--collaborative-pr--conflict-simulation">Objective 3 — Collaborative PR &amp; Conflict Simulation</h2>
+<p>Practice:</p>
+<ol>
+<li>Create feature branches</li>
+<li>Make changes</li>
+<li>Open a Pull Request</li>
+<li>Exchange code reviews</li>
+<li>Deliberately create a merge conflict</li>
+<li>Resolve the conflict</li>
+<li>Protect the <code>main</code> branch</li>
+</ol>
+<hr>
+<h1 id="23-week-2-git-workflow">23. Week 2 Git Workflow</h1>
+<h3 id="update-main">Update <code>main</code></h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> main</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> pull</span><span style="color:#9ECBFF"> origin</span><span style="color:#9ECBFF"> main</span></span></code></pre>
+<h3 id="create-a-feature-branch">Create a Feature Branch</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#79B8FF"> -b</span><span style="color:#9ECBFF"> feat/add-author-schema</span></span></code></pre>
+<h3 id="make-changes">Make Changes</h3>
+<p>Modify:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>src/content.config.ts</span></span></code></pre>
+<p>and add your content under:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>src/content/</span></span></code></pre>
+<h3 id="validate">Validate</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> check</span></span></code></pre>
+<h3 id="stage-changes">Stage Changes</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> .</span></span></code></pre>
+<h3 id="commit">Commit</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> commit</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> "feat(content): add author metadata schema validation"</span></span></code></pre>
+<h3 id="push-feature-branch">Push Feature Branch</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#79B8FF"> -u</span><span style="color:#9ECBFF"> origin</span><span style="color:#9ECBFF"> feat/add-author-schema</span></span></code></pre>
+<h3 id="create-pull-request">Create Pull Request</h3>
+<p>Open GitHub and create a Pull Request.</p>
+<p>Link it to the relevant GitHub Issue.</p>
+<hr>
+<h1 id="24-week-2-deliverables">24. Week 2 Deliverables</h1>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> GitHub Project Board populated with active issues</li>
+<li class="task-list-item"><input type="checkbox" disabled> Astro Content Collections schema defined using Zod</li>
+<li class="task-list-item"><input type="checkbox" disabled> Schema located in <code>src/content.config.ts</code></li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>npm run check</code> runs locally with zero errors</li>
+<li class="task-list-item"><input type="checkbox" disabled> At least 1 closed Pull Request</li>
+<li class="task-list-item"><input type="checkbox" disabled> PR contains evidence of structured peer code review</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>main</code> has Branch Protection Rules</li>
+<li class="task-list-item"><input type="checkbox" disabled> PR approval is required before merging</li>
+</ul>
+<hr>
+<h1 id="25-key-concepts-to-know">25. Key Concepts to Know</h1>
+<p>For the next quiz, understand the differences between:</p>
+<h3 id="agile-vs-scrum">Agile vs Scrum</h3>
+<ul>
+<li><strong>Agile</strong> = set of values/principles</li>
+<li><strong>Scrum</strong> = framework for applying Agile principles</li>
+</ul>
+<h3 id="user-story-vs-acceptance-criteria">User Story vs Acceptance Criteria</h3>
+<ul>
+<li><strong>User Story</strong> = describes the user’s requirement</li>
+<li><strong>Acceptance Criteria</strong> = defines what must be true for the requirement to be accepted</li>
+</ul>
+<h3 id="acceptance-criteria-vs-definition-of-done">Acceptance Criteria vs Definition of Done</h3>
+<ul>
+<li><strong>AC</strong> = feature-specific conditions</li>
+<li><strong>DoD</strong> = overall completion requirements</li>
+</ul>
+<h3 id="github-flow-vs-gitflow-1">GitHub Flow vs GitFlow</h3>
+<ul>
+<li><strong>GitHub Flow</strong> = simple, short-lived feature branches + <code>main</code></li>
+<li><strong>GitFlow</strong> = complex release-oriented branch hierarchy</li>
+</ul>
+<h3 id="pull-request-vs-merge">Pull Request vs Merge</h3>
+<ul>
+<li><strong>Pull Request</strong> = review/discussion/quality gate</li>
+<li><strong>Merge</strong> = combines changes into another branch</li>
+</ul>
+<h3 id="content-collection-vs-zod">Content Collection vs Zod</h3>
+<ul>
+<li><strong>Content Collection</strong> = structured Astro content</li>
+<li><strong>Zod</strong> = validates the content’s schema</li>
+</ul>
+<h3 id="npm-run-check"><code>npm run check</code></h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Markdown/MDX</span></span>
+<span class="line"><span>     ↓</span></span>
+<span class="line"><span>Astro Check</span></span>
+<span class="line"><span>     ↓</span></span>
+<span class="line"><span>TypeScript + Zod validation</span></span>
+<span class="line"><span>     ↓</span></span>
+<span class="line"><span>Errors / Valid Content</span></span></code></pre>
+<hr>
+<h1 id="26-week-3-quiz-coverage">26. Week 3 Quiz Coverage</h1>
+<p>The next quiz covers:</p>
+<ul>
+<li>Scrum frameworks</li>
+<li>User Stories</li>
+<li>GitHub Flow</li>
+<li>SCM platform comparison</li>
+<li>Merge Conflicts</li>
+</ul>
+<p>The quiz takes place during the <strong>first 15 minutes of Week 3 Block 1</strong> and uses a <strong>locked single tab</strong>.</p>
+<aside class="author-bio" aria-labelledby="author-heading" data-astro-cid-xkziw7dw><img src="/_astro/ph_auth_prof.ua-k5CBi_ZJOcSy.webp" alt="Portrait of Alex Rivera" data-astro-cid-xkziw7dw="true" loading="lazy" decoding="async" width="96" height="96" class="avatar"><div class="author-details" data-astro-cid-xkziw7dw><p class="eyebrow" data-astro-cid-xkziw7dw>Written by</p><h2 id="author-heading" data-astro-cid-xkziw7dw>Param Hingorani </h2><p data-astro-cid-xkziw7dw>First year Student at ISE@UL</p><nav aria-label="Param Hingorani 's social links" data-astro-cid-xkziw7dw><ul data-astro-cid-xkziw7dw><li data-astro-cid-xkziw7dw><a href="https://github.com/realP1406" target="_blank" rel="noreferrer" data-astro-cid-xkziw7dw>GitHub</a></li></ul></nav></div></aside></div></article></main><footer data-astro-cid-jo6i4kqk>&copy; 2026 Your name here. All rights reserved.<div class="social-links" data-astro-cid-jo6i4kqk><a href="https://m.webtoo.ls/@astro" target="_blank" data-astro-cid-jo6i4kqk><span class="sr-only" data-astro-cid-jo6i4kqk>Follow Astro on Mastodon</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/mastodon" data-astro-cid-jo6i4kqk><path fill="currentColor" d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z" data-astro-cid-jo6i4kqk></path></svg></a><a href="https://twitter.com/astrodotbuild" target="_blank" data-astro-cid-jo6i4kqk><span class="sr-only" data-astro-cid-jo6i4kqk>Follow Astro on Twitter</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/twitter" data-astro-cid-jo6i4kqk><path fill="currentColor" d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" data-astro-cid-jo6i4kqk></path></svg></a><a href="https://github.com/withastro/astro" target="_blank" data-astro-cid-jo6i4kqk><span class="sr-only" data-astro-cid-jo6i4kqk>Go to Astro's GitHub repo</span><svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github" data-astro-cid-jo6i4kqk><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-jo6i4kqk></path></svg></a></div></footer></body></html>
