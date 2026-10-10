@@ -21,6 +21,10 @@ jobs:
       - name: Install Project & CDK Dependencies
         run: npm ci
 
+      - name: Install CDK Dependencies
+        run: npm ci
+        working-directory: hello-cdk
+
       - name: Build Astro Static Site
         run: npm run build
 
@@ -33,3 +37,4 @@ jobs:
 
       - name: Deploy Infrastructure & Assets with AWS CDK
         run: npx cdk deploy --require-approval never
+        working-directory: hello-cdk
