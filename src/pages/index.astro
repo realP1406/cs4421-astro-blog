@@ -1,7 +1,5 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -11,14 +9,1164 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header />
-		<main>
-			<h1>Hello!</h1>
-			<p>
-				Welcome to this repository of notes organized my weeks for the Scrum/DevOps subject in Block 1 for the ISE course at UL
-			</p>
-			
-		</main>
-		<Footer />
+		<div id="bond-app">
+			<header class="app-header">
+				<a class="brand" href="/" aria-label="Bondwell home">
+					<span class="brand-mark" aria-hidden="true">b</span>
+					<span>bondwell</span>
+				</a>
+				<div class="header-actions" id="signed-in-actions" hidden>
+					<span class="user-email" id="user-email"></span>
+					<button class="button button-quiet" id="sign-out" type="button">Sign out</button>
+				</div>
+				<a class="header-link" href="#bond-app">Your portfolio <span aria-hidden="true">↗</span></a>
+			</header>
+
+			<main>
+				<section id="auth-view" class="auth-layout" aria-labelledby="hero-title">
+					<div class="intro">
+						<p class="eyebrow"><span class="eyebrow-dot"></span> A clearer view of your fixed income</p>
+						<h1 id="hero-title">Make every bond<br />work <em>in harmony.</em></h1>
+						<p class="intro-copy">
+							Bring your bond portfolio together. Keep an eye on income, upcoming coupon dates, and the
+							big picture, all in one calm place.
+						</p>
+						<p class="course-context">
+							Built alongside weekly notes for the Scrum/DevOps subject in Block 1 of the ISE course at UL.
+						</p>
+						<div class="intro-points">
+							<div><span class="point-icon" aria-hidden="true">↗</span><span>See projected income at a glance</span></div>
+							<div><span class="point-icon" aria-hidden="true">◷</span><span>Know what payments are coming up</span></div>
+							<div><span class="point-icon" aria-hidden="true">⌂</span><span>Keep your portfolio in one place</span></div>
+						</div>
+						<div class="preview-card" aria-label="Example bond portfolio summary">
+							<div class="preview-topline">
+								<span>PORTFOLIO SNAPSHOT</span>
+								<span class="preview-status"><span></span> On track</span>
+							</div>
+							<div class="preview-balance">$24,850<span>.00</span></div>
+							<div class="preview-caption">Example total face value</div>
+							<div class="preview-chart" aria-hidden="true">
+								<span style="--height: 34%"></span><span style="--height: 48%"></span>
+								<span style="--height: 42%"></span><span style="--height: 68%"></span>
+								<span style="--height: 55%"></span><span style="--height: 78%"></span>
+								<span style="--height: 64%"></span><span style="--height: 92%"></span>
+								<span style="--height: 74%"></span><span style="--height: 100%"></span>
+								<span style="--height: 83%"></span><span style="--height: 95%"></span>
+							</div>
+							<div class="preview-chart-labels"><span>JAN</span><span>APR</span><span>JUL</span><span>OCT</span><span>DEC</span></div>
+						</div>
+					</div>
+
+					<div class="auth-card">
+						<div class="auth-card-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5V8.8c0-.5.3-1 .8-1.2l6.4-3.2c.5-.3 1.1-.3 1.6 0l6.4 3.2c.5.2.8.7.8 1.2v10.7M2.5 19.5h19M7.5 11v5m4.5-5v5m4.5-5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</div>
+						<p class="eyebrow">YOUR PORTFOLIO, IN FOCUS</p>
+						<h2 id="auth-title">Welcome back</h2>
+						<p class="auth-description" id="auth-description">Sign in to see your portfolio.</p>
+
+						<div class="auth-tabs" role="tablist" aria-label="Account access">
+							<button class="auth-tab is-active" id="login-tab" type="button" role="tab" aria-selected="true">Sign in</button>
+							<button class="auth-tab" id="signup-tab" type="button" role="tab" aria-selected="false">Create account</button>
+						</div>
+
+						<form id="auth-form">
+							<label for="email">Email address</label>
+							<input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+							<label for="password">Password</label>
+							<input id="password" name="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required />
+							<button class="button button-primary auth-submit" id="auth-submit" type="submit">
+								Sign in <span aria-hidden="true">→</span>
+							</button>
+							<p class="form-message" id="auth-message" role="status" aria-live="polite"></p>
+						</form>
+						<p class="secure-note"><span aria-hidden="true">◇</span> Your portfolio is private and secure.</p>
+					</div>
+				</section>
+
+				<section id="dashboard-view" class="dashboard" aria-labelledby="greeting" hidden>
+					<div class="dashboard-heading">
+						<div>
+							<p class="eyebrow"><span class="eyebrow-dot"></span> YOUR PORTFOLIO</p>
+							<h1 id="greeting">Good morning.</h1>
+							<p class="dashboard-subtitle">Here’s what’s happening with your bonds.</p>
+						</div>
+						<button class="button button-primary add-bond-button" id="open-bond-form" type="button">
+							<span aria-hidden="true">＋</span> Add a bond
+						</button>
+					</div>
+					<p class="dashboard-message" id="dashboard-message" role="status" aria-live="polite"></p>
+
+					<div class="stat-grid">
+						<article class="stat-card">
+							<div class="stat-label">Total face value <span class="stat-icon" aria-hidden="true">↗</span></div>
+							<strong id="total-invested">$0.00</strong>
+							<span class="stat-foot" id="bond-count">0 bonds</span>
+						</article>
+						<article class="stat-card">
+							<div class="stat-label">Next coupon <span class="stat-icon" aria-hidden="true">◷</span></div>
+							<strong id="next-payment-amount">$0.00</strong>
+							<span class="stat-foot" id="next-payment-date">No payments scheduled</span>
+						</article>
+						<article class="stat-card">
+							<div class="stat-label">Income in the next 12 months <span class="stat-icon" aria-hidden="true">⌁</span></div>
+							<strong id="year-income">$0.00</strong>
+							<span class="stat-foot">Projected coupon payments</span>
+						</article>
+					</div>
+
+					<div class="dashboard-grid">
+						<section class="panel income-panel" aria-labelledby="income-title">
+							<div class="panel-heading">
+								<div><p class="eyebrow">YOUR CASH FLOW</p><h2 id="income-title">Income outlook</h2></div>
+								<span class="chart-period">Next 12 months</span>
+							</div>
+							<div class="chart" id="income-chart" role="img" aria-label="Projected coupon payments by month"></div>
+							<div class="chart-legend"><span></span>Projected coupon income</div>
+						</section>
+
+						<section class="panel payments-panel" aria-labelledby="payments-title">
+							<div class="panel-heading">
+								<div><p class="eyebrow">MARK YOUR CALENDAR</p><h2 id="payments-title">Upcoming payments</h2></div>
+								<label class="sr-only" for="payment-period">Payment period</label>
+								<select id="payment-period" class="period-select">
+									<option value="1">30 days</option>
+									<option value="3">3 months</option>
+									<option value="6">6 months</option>
+									<option value="12" selected>12 months</option>
+								</select>
+							</div>
+							<div class="payments-list" id="payments-list"><div class="empty-state">Your upcoming payments will appear here.</div></div>
+						</section>
+					</div>
+
+					<section class="panel portfolio-panel" aria-labelledby="portfolio-title">
+						<div class="panel-heading">
+							<div><p class="eyebrow">ALL IN ONE PLACE</p><h2 id="portfolio-title">Your bonds <span class="count-pill" id="bond-count-pill">0</span></h2></div>
+							<button class="text-button" type="button" id="open-bond-form-secondary" data-open-bond-form>＋ Add bond</button>
+						</div>
+						<div class="bond-list" id="bond-list"><div class="empty-state">Your bonds will appear here.</div></div>
+					</section>
+					<p class="disclaimer">Income projections are estimates based on the information you provide and are not financial advice.</p>
+				</section>
+			</main>
+
+			<footer class="app-footer">
+				<a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true">b</span><span>bondwell</span></a>
+				<span>A little more clarity for your fixed income.</span>
+				<span>© {new Date().getFullYear()} Bondwell</span>
+			</footer>
+
+			<dialog id="bond-dialog" class="bond-dialog" aria-labelledby="bond-dialog-title">
+				<div class="dialog-heading">
+					<div><p class="eyebrow">PORTFOLIO DETAILS</p><h2 id="bond-dialog-title">Add a bond</h2></div>
+					<button class="dialog-close" id="close-bond-form" type="button" aria-label="Close">×</button>
+				</div>
+				<form id="bond-form">
+					<label for="bond-name">Bond name</label>
+					<input id="bond-name" name="name" type="text" maxlength="100" placeholder="e.g. Treasury note" required />
+					<div class="form-grid">
+						<div><label for="face-value">Face value</label><input id="face-value" name="faceValue" type="number" min="0.01" step="0.01" placeholder="1000" required /></div>
+						<div><label for="coupon-rate">Coupon rate (%)</label><input id="coupon-rate" name="couponRate" type="number" min="0" max="100" step="0.0001" placeholder="4.25" required /></div>
+					</div>
+					<div class="form-grid">
+						<div><label for="pay-day">Payment day</label><input id="pay-day" name="payDay" type="number" min="1" max="31" value="15" required /></div>
+						<div><label for="maturity-date">Maturity date</label><input id="maturity-date" name="maturityDate" type="date" required /></div>
+					</div>
+					<fieldset class="payment-months">
+						<legend>Coupon payment months</legend>
+						{[
+							['1', 'Jan'], ['2', 'Feb'], ['3', 'Mar'], ['4', 'Apr'], ['5', 'May'], ['6', 'Jun'],
+							['7', 'Jul'], ['8', 'Aug'], ['9', 'Sep'], ['10', 'Oct'], ['11', 'Nov'], ['12', 'Dec'],
+						].map(([value, label]) => (
+							<label class="month-option"><input type="checkbox" name="payMonths" value={value} checked={value === '3' || value === '9'} /><span>{label}</span></label>
+						))}
+					</fieldset>
+					<label class="cumulative-option"><input type="checkbox" name="isCumulative" /><span>Single payment at maturity</span></label>
+					<p class="form-message" id="bond-message" role="status" aria-live="polite"></p>
+					<div class="dialog-actions">
+						<button class="button button-quiet" id="cancel-bond-form" type="button">Cancel</button>
+						<button class="button button-primary" type="submit">Save bond <span aria-hidden="true">→</span></button>
+					</div>
+				</form>
+			</dialog>
+		</div>
+		<script>
+			import '../scripts/bond-app';
+
+			document.querySelector<HTMLButtonElement>('[data-open-bond-form]')?.addEventListener('click', () => {
+				document.querySelector<HTMLButtonElement>('#open-bond-form')?.click();
+			});
+			document.querySelector<HTMLButtonElement>('#cancel-bond-form')?.addEventListener('click', () => {
+				document.querySelector<HTMLDialogElement>('#bond-dialog')?.close();
+			});
+		</script>
 	</body>
 </html>
+
+<style is:global>
+	:root {
+		--ink: #20342e;
+		--muted: #78877f;
+		--forest: #315b49;
+		--forest-dark: #234737;
+		--sage: #e8eee7;
+		--paper: #f7f8f4;
+		--line: #e8ebe5;
+		--font-app: 'DM Sans', var(--font-atkinson), sans-serif;
+	}
+	body:has(#bond-app) {
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-app);
+		font-size: 15px;
+		line-height: 1.5;
+	}
+	#bond-app,
+	#bond-app * {
+		box-sizing: border-box;
+	}
+	#bond-app button,
+	#bond-app input,
+	#bond-app select {
+		font: inherit;
+	}
+	#bond-app button,
+	#bond-app a,
+	#bond-app select,
+	#bond-app input {
+		-webkit-tap-highlight-color: transparent;
+	}
+	#bond-app .app-header {
+		height: 78px;
+		padding: 0 max(5vw, calc((100vw - 1160px) / 2));
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid rgba(32, 52, 46, 0.08);
+		background: rgba(250, 251, 248, 0.92);
+	}
+	#bond-app .brand {
+		display: inline-flex;
+		gap: 10px;
+		align-items: center;
+		color: var(--ink);
+		font-size: 19px;
+		font-weight: 700;
+		letter-spacing: -0.7px;
+		text-decoration: none;
+	}
+	#bond-app .brand-mark {
+		display: grid;
+		width: 34px;
+		height: 34px;
+		place-items: center;
+		border-radius: 11px;
+		background: var(--forest);
+		color: white;
+		font-family: Georgia, serif;
+		font-size: 23px;
+		font-style: italic;
+	}
+	#bond-app .header-link {
+		color: var(--forest);
+		font-size: 13px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	#bond-app .header-link span {
+		margin-left: 5px;
+	}
+	#bond-app .header-actions {
+		display: flex;
+		align-items: center;
+		gap: 18px;
+		margin-left: auto;
+		margin-right: 28px;
+	}
+	#bond-app .header-actions[hidden],
+	#bond-app [hidden] {
+		display: none !important;
+	}
+	#bond-app .user-email {
+		color: var(--muted);
+		font-size: 13px;
+	}
+	#bond-app main {
+		width: min(1160px, calc(100% - 48px));
+		max-width: none;
+		min-height: calc(100vh - 148px);
+		margin: 0 auto;
+		padding: 70px 0 82px;
+	}
+	#bond-app h1,
+	#bond-app h2,
+	#bond-app p {
+		margin-top: 0;
+	}
+	#bond-app h1,
+	#bond-app h2 {
+		color: var(--ink);
+	}
+	#bond-app .auth-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 410px;
+		gap: clamp(45px, 8vw, 120px);
+		align-items: center;
+		max-width: 1040px;
+		margin: 0 auto;
+	}
+	#bond-app .intro {
+		padding: 8px 0 14px;
+	}
+	#bond-app .eyebrow {
+		margin: 0 0 12px;
+		color: #718379;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 1.6px;
+		line-height: 1.4;
+	}
+	#bond-app .eyebrow-dot {
+		display: inline-block;
+		width: 7px;
+		height: 7px;
+		margin: 0 7px 1px 0;
+		border-radius: 50%;
+		background: #91a78a;
+	}
+	#bond-app .intro h1 {
+		margin-bottom: 21px;
+		font-family: Georgia, 'Times New Roman', serif;
+		font-size: clamp(40px, 5.3vw, 64px);
+		font-weight: 400;
+		letter-spacing: -2.3px;
+		line-height: 1.07;
+	}
+	#bond-app .intro h1 em {
+		color: var(--forest);
+		font-weight: 400;
+	}
+	#bond-app .intro-copy {
+		max-width: 490px;
+		margin-bottom: 25px;
+		color: #75837b;
+		font-size: 15px;
+		line-height: 1.8;
+	}
+	#bond-app .course-context {
+		max-width: 490px;
+		margin: -14px 0 22px;
+		color: #9aa49d;
+		font-size: 10px;
+	}
+	#bond-app .intro-points {
+		display: grid;
+		gap: 11px;
+		margin-bottom: 30px;
+		color: #52665b;
+		font-size: 13px;
+	}
+	#bond-app .intro-points > div {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	#bond-app .point-icon {
+		display: grid;
+		width: 23px;
+		height: 23px;
+		place-items: center;
+		border-radius: 7px;
+		background: #e9eee6;
+		color: var(--forest);
+		font-size: 13px;
+		font-weight: 700;
+	}
+	#bond-app .preview-card {
+		max-width: 465px;
+		padding: 17px 20px 12px;
+		border: 1px solid #e8ebe5;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.76);
+		box-shadow: 0 13px 35px rgba(46, 64, 53, 0.045);
+	}
+	#bond-app .preview-topline {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: #9aa49d;
+		font-size: 8px;
+		font-weight: 700;
+		letter-spacing: 1px;
+	}
+	#bond-app .preview-status {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		color: #769078;
+		font-size: 9px;
+		letter-spacing: 0;
+	}
+	#bond-app .preview-status span {
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: #8eab8b;
+	}
+	#bond-app .preview-balance {
+		margin-top: 8px;
+		color: var(--ink);
+		font-size: 23px;
+		font-weight: 700;
+		letter-spacing: -0.8px;
+	}
+	#bond-app .preview-balance span {
+		color: #9ba69e;
+		font-size: 15px;
+	}
+	#bond-app .preview-caption {
+		margin-top: -1px;
+		color: #9aa49d;
+		font-size: 9px;
+	}
+	#bond-app .preview-chart {
+		display: flex;
+		height: 52px;
+		align-items: end;
+		gap: 8px;
+		margin-top: 8px;
+		border-bottom: 1px solid #e9ede8;
+		background: repeating-linear-gradient(to bottom, transparent 0, transparent 16px, #f1f3ef 17px);
+	}
+	#bond-app .preview-chart span {
+		flex: 1;
+		height: var(--height);
+		border-radius: 3px 3px 0 0;
+		background: #9eb29b;
+		opacity: 0.76;
+	}
+	#bond-app .preview-chart-labels {
+		display: flex;
+		justify-content: space-between;
+		padding-top: 5px;
+		color: #abb3ac;
+		font-size: 7px;
+		letter-spacing: 0.5px;
+	}
+	#bond-app .auth-card {
+		padding: 33px 34px 26px;
+		border: 1px solid #e9ece7;
+		border-radius: 15px;
+		background: #fff;
+		box-shadow: 0 18px 55px rgba(44, 60, 50, 0.07);
+	}
+	#bond-app .auth-card-icon {
+		display: grid;
+		width: 43px;
+		height: 43px;
+		margin-bottom: 23px;
+		place-items: center;
+		border-radius: 12px;
+		background: var(--sage);
+		color: var(--forest);
+	}
+	#bond-app .auth-card-icon svg {
+		width: 25px;
+		height: 25px;
+	}
+	#bond-app .auth-card h2 {
+		margin: 0 0 5px;
+		font-family: Georgia, 'Times New Roman', serif;
+		font-size: 27px;
+		font-weight: 400;
+		letter-spacing: -0.5px;
+	}
+	#bond-app .auth-description {
+		margin-bottom: 23px;
+		color: #87938b;
+		font-size: 13px;
+	}
+	#bond-app .auth-tabs {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		padding: 4px;
+		margin-bottom: 21px;
+		border-radius: 8px;
+		background: #f4f6f2;
+	}
+	#bond-app .auth-tab {
+		padding: 9px 6px;
+		border: 0;
+		border-radius: 6px;
+		background: transparent;
+		color: #87938b;
+		cursor: pointer;
+		font-size: 12px;
+		font-weight: 600;
+	}
+	#bond-app .auth-tab.is-active {
+		background: #fff;
+		color: var(--ink);
+		box-shadow: 0 1px 4px rgba(35, 58, 44, 0.1);
+	}
+	#bond-app form > label,
+	#bond-app .form-grid label {
+		display: block;
+		margin: 0 0 7px;
+		color: #46594e;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	#bond-app form > input,
+	#bond-app .form-grid input {
+		width: 100%;
+		height: 43px;
+		padding: 0 12px;
+		margin-bottom: 16px;
+		border: 1px solid #e4e9e3;
+		border-radius: 7px;
+		outline: none;
+		background: #fff;
+		color: var(--ink);
+		font-size: 12px;
+	}
+	#bond-app input:focus,
+	#bond-app select:focus {
+		border-color: #8ca794;
+		box-shadow: 0 0 0 3px rgba(106, 145, 116, 0.12);
+	}
+	#bond-app input::placeholder {
+		color: #b1bab3;
+	}
+	#bond-app .button {
+		display: inline-flex;
+		min-height: 42px;
+		align-items: center;
+		justify-content: center;
+		gap: 11px;
+		padding: 0 16px;
+		border: 1px solid transparent;
+		border-radius: 7px;
+		cursor: pointer;
+		font-size: 12px;
+		font-weight: 700;
+		transition: background 120ms ease, transform 120ms ease;
+	}
+	#bond-app .button:hover:not(:disabled) {
+		transform: translateY(-1px);
+	}
+	#bond-app .button:disabled {
+		cursor: not-allowed;
+		opacity: 0.58;
+	}
+	#bond-app .button-primary {
+		background: var(--forest);
+		color: white;
+	}
+	#bond-app .button-primary:hover:not(:disabled) {
+		background: var(--forest-dark);
+	}
+	#bond-app .button-quiet {
+		border-color: #e5e9e3;
+		background: #fff;
+		color: #52665b;
+	}
+	#bond-app .auth-submit {
+		width: 100%;
+		margin-top: 4px;
+	}
+	#bond-app .auth-submit span,
+	#bond-app .add-bond-button span {
+		font-size: 16px;
+	}
+	#bond-app .form-message {
+		min-height: 17px;
+		margin: 10px 0 0;
+		color: #a94442;
+		font-size: 11px;
+		line-height: 1.5;
+	}
+	#bond-app .secure-note {
+		margin: 14px 0 0;
+		padding-top: 15px;
+		border-top: 1px solid #eff1ed;
+		color: #9aa49d;
+		font-size: 10px;
+		text-align: center;
+	}
+	#bond-app .secure-note span {
+		padding-right: 3px;
+		color: #849c87;
+	}
+	#bond-app .dashboard {
+		max-width: 1040px;
+		margin: 0 auto;
+	}
+	#bond-app .dashboard-heading,
+	#bond-app .panel-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+	}
+	#bond-app .dashboard-heading {
+		margin-bottom: 27px;
+	}
+	#bond-app .dashboard-heading h1 {
+		margin: 0 0 5px;
+		font-family: Georgia, 'Times New Roman', serif;
+		font-size: 38px;
+		font-weight: 400;
+		letter-spacing: -1px;
+	}
+	#bond-app .dashboard-subtitle {
+		margin: 0;
+		color: #849087;
+		font-size: 13px;
+	}
+	#bond-app .add-bond-button {
+		min-height: 44px;
+		padding: 0 18px;
+	}
+	#bond-app .dashboard-message {
+		color: #a94442;
+		font-size: 12px;
+	}
+	#bond-app .stat-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 15px;
+		margin-bottom: 17px;
+	}
+	#bond-app .stat-card,
+	#bond-app .panel {
+		border: 1px solid #e7ebe5;
+		border-radius: 11px;
+		background: #fff;
+	}
+	#bond-app .stat-card {
+		padding: 18px 20px 16px;
+	}
+	#bond-app .stat-label {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: #849087;
+		font-size: 11px;
+	}
+	#bond-app .stat-icon {
+		display: grid;
+		width: 24px;
+		height: 24px;
+		place-items: center;
+		border-radius: 7px;
+		background: #f1f4ef;
+		color: #66836d;
+		font-size: 13px;
+	}
+	#bond-app .stat-card > strong {
+		display: block;
+		margin-top: 12px;
+		color: var(--ink);
+		font-size: 25px;
+		letter-spacing: -0.8px;
+	}
+	#bond-app .stat-foot {
+		display: block;
+		margin-top: 4px;
+		color: #a0aaa2;
+		font-size: 10px;
+	}
+	#bond-app .dashboard-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.25fr) minmax(350px, 0.95fr);
+		gap: 17px;
+		margin-bottom: 17px;
+	}
+	#bond-app .panel {
+		padding: 20px;
+	}
+	#bond-app .panel-heading {
+		margin-bottom: 17px;
+	}
+	#bond-app .panel-heading .eyebrow {
+		margin-bottom: 5px;
+	}
+	#bond-app .panel-heading h2 {
+		margin: 0;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: -0.2px;
+	}
+	#bond-app .chart-period,
+	#bond-app .period-select {
+		color: #89958c;
+		font-size: 10px;
+	}
+	#bond-app .period-select {
+		padding: 7px 9px;
+		border: 1px solid #e7ebe5;
+		border-radius: 6px;
+		background: #fff;
+	}
+	#bond-app .chart {
+		display: grid;
+		height: 170px;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		gap: 10px;
+		align-items: end;
+		padding: 5px 3px 0;
+		border-bottom: 1px solid #edf0eb;
+		background: repeating-linear-gradient(to bottom, transparent 0, transparent 41px, #f3f5f2 42px);
+	}
+	#bond-app .income-month {
+		display: flex;
+		height: 100%;
+		min-width: 0;
+		flex-direction: column;
+		align-items: center;
+		justify-content: end;
+		gap: 7px;
+	}
+	#bond-app .income-bar-track {
+		display: flex;
+		width: min(24px, 100%);
+		height: 138px;
+		align-items: end;
+		overflow: hidden;
+		border-radius: 4px 4px 0 0;
+		background: rgba(233, 239, 231, 0.48);
+	}
+	#bond-app .income-bar-fill {
+		width: 100%;
+		min-height: 0;
+		border-radius: 4px 4px 0 0;
+		background: #8da98e;
+		transition: height 180ms ease;
+	}
+	#bond-app .income-month-label {
+		color: #9ba59e;
+		font-size: 9px;
+	}
+	#bond-app .chart-legend {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		margin-top: 12px;
+		color: #929e95;
+		font-size: 10px;
+	}
+	#bond-app .chart-legend span {
+		width: 7px;
+		height: 7px;
+		border-radius: 2px;
+		background: #8da98e;
+	}
+	#bond-app .payments-list,
+	#bond-app .bond-list {
+		display: grid;
+	}
+	#bond-app .payment-row {
+		display: grid;
+		grid-template-columns: 43px minmax(0, 1fr) auto;
+		gap: 12px;
+		align-items: center;
+		padding: 10px 0;
+		border-bottom: 1px solid #f0f2ee;
+	}
+	#bond-app .payment-row:last-child,
+	#bond-app .bond-row:last-child {
+		border-bottom: 0;
+	}
+	#bond-app .payment-date {
+		display: flex;
+		width: 39px;
+		height: 42px;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+		background: #f3f5f1;
+		color: #65806b;
+		font-size: 9px;
+		line-height: 1.25;
+	}
+	#bond-app .payment-date span:last-child {
+		color: #3e5e49;
+		font-size: 15px;
+		font-weight: 700;
+	}
+	#bond-app .payment-details {
+		display: grid;
+		gap: 2px;
+		min-width: 0;
+	}
+	#bond-app .payment-details strong,
+	#bond-app .bond-details strong {
+		overflow: hidden;
+		color: #44564b;
+		font-size: 11px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	#bond-app .payment-details > span,
+	#bond-app .bond-details > span {
+		color: #9aa49d;
+		font-size: 9px;
+	}
+	#bond-app .weekend-notice {
+		color: #aa8052;
+		font-size: 9px;
+	}
+	#bond-app .payment-amount,
+	#bond-app .bond-value {
+		color: var(--ink);
+		font-size: 11px;
+		white-space: nowrap;
+	}
+	#bond-app .empty-state {
+		padding: 20px 8px;
+		color: #9aa49d;
+		font-size: 11px;
+		text-align: center;
+	}
+	#bond-app .portfolio-panel {
+		margin-bottom: 12px;
+	}
+	#bond-app .portfolio-panel .panel-heading {
+		margin-bottom: 7px;
+	}
+	#bond-app .count-pill {
+		display: inline-grid;
+		min-width: 20px;
+		height: 20px;
+		padding: 0 5px;
+		place-items: center;
+		border-radius: 10px;
+		background: #eff3ed;
+		color: #738978;
+		font-size: 10px;
+		font-weight: 600;
+		vertical-align: 1px;
+	}
+	#bond-app .text-button {
+		border: 0;
+		background: none;
+		color: var(--forest);
+		cursor: pointer;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	#bond-app .bond-row {
+		display: grid;
+		grid-template-columns: 34px minmax(0, 1fr) auto 27px;
+		gap: 12px;
+		align-items: center;
+		padding: 12px 3px;
+		border-bottom: 1px solid #f0f2ee;
+	}
+	#bond-app .bond-symbol {
+		display: grid;
+		width: 33px;
+		height: 33px;
+		place-items: center;
+		border-radius: 9px;
+		background: #edf2eb;
+		color: #6d876f;
+		font-family: Georgia, serif;
+		font-size: 15px;
+	}
+	#bond-app .bond-details {
+		display: grid;
+		gap: 3px;
+		min-width: 0;
+	}
+	#bond-app .delete-bond {
+		width: 27px;
+		height: 27px;
+		border: 0;
+		border-radius: 6px;
+		background: transparent;
+		color: #a3ada5;
+		cursor: pointer;
+		font-size: 19px;
+	}
+	#bond-app .delete-bond:hover {
+		background: #f8eeec;
+		color: #a45f54;
+	}
+	#bond-app .disclaimer {
+		color: #a1aaa3;
+		font-size: 9px;
+		text-align: center;
+	}
+	#bond-app .app-footer {
+		display: flex;
+		min-height: 70px;
+		align-items: center;
+		justify-content: space-between;
+		gap: 15px;
+		padding: 15px max(5vw, calc((100vw - 1160px) / 2));
+		border-top: 1px solid rgba(32, 52, 46, 0.08);
+		color: #9aa49d;
+		font-size: 10px;
+	}
+	#bond-app .footer-brand {
+		font-size: 15px;
+	}
+	#bond-app .footer-brand .brand-mark {
+		width: 25px;
+		height: 25px;
+		border-radius: 8px;
+		font-size: 18px;
+	}
+	#bond-app .bond-dialog {
+		width: min(480px, calc(100% - 28px));
+		max-height: min(90vh, 800px);
+		padding: 25px;
+		border: 1px solid #e5eae3;
+		border-radius: 14px;
+		background: #fff;
+		color: var(--ink);
+		box-shadow: 0 24px 80px rgba(32, 52, 46, 0.2);
+	}
+	#bond-app .bond-dialog::backdrop {
+		background: rgba(27, 43, 35, 0.32);
+		backdrop-filter: blur(2px);
+	}
+	#bond-app .dialog-heading {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin-bottom: 22px;
+	}
+	#bond-app .dialog-heading h2 {
+		margin: 0;
+		font-family: Georgia, 'Times New Roman', serif;
+		font-size: 25px;
+		font-weight: 400;
+	}
+	#bond-app .dialog-close {
+		width: 30px;
+		height: 30px;
+		border: 0;
+		border-radius: 6px;
+		background: #f3f5f2;
+		color: #718078;
+		cursor: pointer;
+		font-size: 20px;
+		line-height: 1;
+	}
+	#bond-app .form-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+	#bond-app .form-grid input {
+		margin-bottom: 15px;
+	}
+	#bond-app .payment-months {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		gap: 7px;
+		padding: 0;
+		margin: 3px 0 15px;
+		border: 0;
+	}
+	#bond-app .payment-months legend {
+		margin-bottom: 9px;
+		color: #46594e;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	#bond-app .month-option {
+		position: relative;
+		cursor: pointer;
+	}
+	#bond-app .month-option input,
+	#bond-app .cumulative-option input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
+	#bond-app .month-option span {
+		display: grid;
+		height: 31px;
+		place-items: center;
+		border: 1px solid #e5eae3;
+		border-radius: 6px;
+		color: #87938b;
+		font-size: 10px;
+	}
+	#bond-app .month-option input:checked + span {
+		border-color: #a9bca8;
+		background: #eef3ec;
+		color: #45694e;
+	}
+	#bond-app .month-option input:focus-visible + span,
+	#bond-app .cumulative-option input:focus-visible + span {
+		outline: 2px solid #668e71;
+		outline-offset: 2px;
+	}
+	#bond-app .cumulative-option {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		margin-bottom: 5px;
+		color: #718078;
+		cursor: pointer;
+		font-size: 11px;
+	}
+	#bond-app .cumulative-option span {
+		position: relative;
+		padding-left: 22px;
+	}
+	#bond-app .cumulative-option span::before {
+		position: absolute;
+		top: 1px;
+		left: 0;
+		width: 13px;
+		height: 13px;
+		border: 1px solid #d9e1d9;
+		border-radius: 3px;
+		content: '';
+	}
+	#bond-app .cumulative-option input:checked + span::before {
+		border-color: var(--forest);
+		background: var(--forest);
+		box-shadow: inset 0 0 0 3px #fff;
+	}
+	#bond-app .dialog-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 9px;
+		margin-top: 12px;
+	}
+	#bond-app .sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+	@media (max-width: 850px) {
+		#bond-app main {
+			padding-top: 48px;
+		}
+		#bond-app .auth-layout {
+			grid-template-columns: minmax(0, 1fr) 360px;
+			gap: 35px;
+		}
+		#bond-app .auth-card {
+			padding: 27px 25px 23px;
+		}
+		#bond-app .dashboard-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 650px) {
+		#bond-app .app-header {
+			height: 66px;
+			padding: 0 20px;
+		}
+		#bond-app main {
+			width: min(100% - 36px, 500px);
+			padding: 38px 0 50px;
+		}
+		#bond-app .auth-layout {
+			grid-template-columns: 1fr;
+			gap: 27px;
+		}
+		#bond-app .intro {
+			padding: 0;
+		}
+		#bond-app .intro h1 {
+			font-size: 43px;
+		}
+		#bond-app .intro-copy {
+			margin-bottom: 17px;
+		}
+		#bond-app .intro-points {
+			gap: 8px;
+			margin-bottom: 19px;
+		}
+		#bond-app .preview-card {
+			display: none;
+		}
+		#bond-app .auth-card {
+			padding: 25px 23px 21px;
+		}
+		#bond-app .header-actions {
+			gap: 8px;
+			margin-right: 12px;
+		}
+		#bond-app .user-email {
+			max-width: 100px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		#bond-app .header-actions .button {
+			min-height: 35px;
+			padding: 0 10px;
+			font-size: 10px;
+		}
+		#bond-app .header-link {
+			font-size: 11px;
+		}
+		#bond-app .stat-grid {
+			grid-template-columns: 1fr;
+			gap: 9px;
+		}
+		#bond-app .stat-card {
+			padding: 14px 16px;
+		}
+		#bond-app .stat-card > strong {
+			margin-top: 6px;
+			font-size: 22px;
+		}
+		#bond-app .dashboard-heading h1 {
+			font-size: 31px;
+		}
+		#bond-app .dashboard-heading {
+			align-items: flex-start;
+		}
+		#bond-app .add-bond-button {
+			gap: 5px;
+			padding: 0 10px;
+			font-size: 10px;
+		}
+		#bond-app .panel {
+			padding: 15px;
+		}
+		#bond-app .chart {
+			gap: 5px;
+		}
+		#bond-app .income-bar-track {
+			width: min(18px, 100%);
+		}
+		#bond-app .payment-row {
+			grid-template-columns: 37px minmax(0, 1fr) auto;
+			gap: 8px;
+		}
+		#bond-app .payment-date {
+			width: 35px;
+		}
+		#bond-app .app-footer {
+			flex-wrap: wrap;
+			justify-content: center;
+			padding: 15px 20px;
+			text-align: center;
+		}
+		#bond-app .app-footer > span:nth-child(2) {
+			display: none;
+		}
+	}
+</style>
