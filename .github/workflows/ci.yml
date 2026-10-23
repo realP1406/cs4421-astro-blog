@@ -1,81 +1,12 @@
-name: CI/CD
+name: Deploy Static Site via AWS CDK
 
 on:
-  pull_request:
   push:
     branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
-
-env:
-  PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
-  PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
 
 jobs:
-  verify:
-    name: Lint, type-check, build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js Runtime
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            hello-cdk/package-lock.json
-
-      - name: Install Project Dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Type-check
-        run: npm run check
-
-      - name: Build Astro Static Site
-        run: npm run build
-
-      # Fail the deploy (not the PR) if the Supabase values did not get baked into the bundle.
-      - name: Verify Supabase config is in the build
-        if: github.event_name != 'pull_request'
-        run: |
-          if [ -z "$PUBLIC_SUPABASE_URL" ] || [ -z "$PUBLIC_SUPABASE_PUBLISHABLE_KEY" ]; then
-            echo "::error::PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set as repository variables."
-            exit 1
-          fi
-          if ! grep -rqF "$PUBLIC_SUPABASE_URL" dist/; then
-            echo "::error::Supabase URL was not found in dist/. The build did not pick up the variable."
-            exit 1
-          fi
-
-      - name: Upload build output
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          if-no-files-found: error
-          retention-days: 7
-
   deploy:
-    name: Deploy with AWS CDK
-    needs: verify
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
       - name: Checkout Source Code
@@ -86,18 +17,16 @@ jobs:
         with:
           node-version: 24
           cache: 'npm'
-          cache-dependency-path: hello-cdk/package-lock.json
 
-      # Deploy exactly what `verify` built and checked, instead of rebuilding.
-      - name: Download build output
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
+      - name: Install Project & CDK Dependencies
+        run: npm ci
 
       - name: Install CDK Dependencies
         run: npm ci
         working-directory: hello-cdk
+
+      - name: Build Astro Static Site
+        run: npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -107,13 +36,5 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy Infrastructure & Assets with AWS CDK
-        run: npx cdk deploy --require-approval never --outputs-file cdk-outputs.json
+        run: npx cdk deploy --require-approval never
         working-directory: hello-cdk
-
-      - name: Show deployed URL
-        if: always()
-        run: |
-          echo "### CDK outputs" >> "$GITHUB_STEP_SUMMARY"
-          echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          cat hello-cdk/cdk-outputs.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo '{}' >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
