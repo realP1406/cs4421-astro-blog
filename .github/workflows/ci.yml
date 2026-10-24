@@ -9,18 +9,20 @@ on:
 permissions:
   contents: read
 
-
+# One run per branch/PR; a newer push cancels the older run,
+# except on main, where deploys always finish.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
+  # Astro inlines PUBLIC_* values at build time, so they must exist during `npm run build`.
   PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
   PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
 
 jobs:
   verify:
-    name: Lint, type-check, build
+    name: Lint, type-check, unit tests, build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -46,6 +48,10 @@ jobs:
       - name: Type-check
         run: npm run check
 
+      # Fast checks first: a failing test stops the run before the slower build.
+      - name: Unit tests
+        run: npm run test:coverage
+
       - name: Build Astro Static Site
         run: npm run build
 
@@ -54,11 +60,11 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           if [ -z "$PUBLIC_SUPABASE_URL" ] || [ -z "$PUBLIC_SUPABASE_PUBLISHABLE_KEY" ]; then
-            echo "::error::PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set as repository variables."
+            echo "::error::PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set as repository secrets."
             exit 1
           fi
           if ! grep -rqF "$PUBLIC_SUPABASE_URL" dist/; then
-            echo "::error::Supabase URL was not found in dist/. The build did not pick up the variable."
+            echo "::error::Supabase URL was not found in dist/. The build did not pick up the secret."
             exit 1
           fi
 
@@ -70,9 +76,44 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  # Runs in parallel with `verify`. It builds its own copy of the site against a fake
+  # Supabase (see playwright.config.ts), so it needs no real secrets.
+  e2e:
+    name: Browser tests (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
   deploy:
     name: Deploy with AWS CDK
-    needs: verify
+    needs: [verify, e2e]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20
