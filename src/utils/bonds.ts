@@ -32,15 +32,24 @@ export function getEstimatedYtm(bond: Bond): number | null {
 	if (bond.is_cumulative) {
 		cashFlows.set(maturity.getTime(), bond.face_value * (bond.coupon_rate / 100) * ((maturity.getTime() - purchaseDate.getTime()) / 86_400_000 / 365) + bond.face_value);
 	} else {
-		for (let year = purchaseDate.getUTCFullYear(); year <= maturity.getUTCFullYear(); year += 1) {
+		// Build the full payment schedule (starting one year early so the first payment has a previous date).
+		const scheduledDates = new Map<number, Date>();
+		for (let year = purchaseDate.getUTCFullYear() - 1; year <= maturity.getUTCFullYear(); year += 1) {
 			for (const month of bond.pay_months) {
 				const date = paymentDate(year, month, bond.pay_day);
-				if (date <= purchaseDate || date > maturity) continue;
-				const previousDate = paymentDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, bond.pay_day);
-				const days = (date.getTime() - previousDate.getTime()) / 86_400_000;
-				cashFlows.set(date.getTime(), bond.face_value * (bond.coupon_rate / 100) * days / 365);
+				scheduledDates.set(date.getTime(), date);
 			}
 		}
+		const schedule = [...scheduledDates.values()].sort((first, second) => first.getTime() - second.getTime());
+
+		// Each coupon covers the days since the previous payment (or since purchase, for the first one).
+		schedule.forEach((date, index) => {
+			if (date <= purchaseDate || date > maturity) return;
+			const previousDate = schedule[index - 1];
+			const accrualStart = previousDate && previousDate > purchaseDate ? previousDate : purchaseDate;
+			const days = (date.getTime() - accrualStart.getTime()) / 86_400_000;
+			cashFlows.set(date.getTime(), bond.face_value * (bond.coupon_rate / 100) * days / 365);
+		});
 		cashFlows.set(maturity.getTime(), (cashFlows.get(maturity.getTime()) ?? 0) + bond.face_value);
 	}
 
