@@ -116,9 +116,31 @@ jobs:
           path: playwright-report
           retention-days: 7
 
+  docker:
+    name: Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Build image and run smoke test
+        run: npm run docker:smoke
+
   deploy:
     name: Deploy with AWS CDK
-    needs: [verify, e2e]
+    needs: [verify, e2e, docker]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20

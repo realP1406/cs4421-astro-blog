@@ -1,0 +1,36 @@
+# Dependencies and build output are created inside the image
+node_modules
+dist
+dist-e2e
+dist-server
+.astro
+
+# Version control and CI
+.git
+.github
+.gitignore
+
+# Things the running app does not need
+hello-cdk
+e2e
+docs
+scripts
+coverage
+playwright-report
+test-results
+**/*.test.ts
+vitest.config.ts
+vitest.global-setup.ts
+playwright.config.ts
+.vscode
+*.md
+Main.java
+Main.class
+
+# Never send secrets into the build
+.env*
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
