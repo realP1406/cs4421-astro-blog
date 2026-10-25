@@ -76,6 +76,11 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Build server target (checks it still compiles)
+        run: npm run build:server
+        env:
+          E2E_OUT_DIR: dist-server
+
   # Runs in parallel with `verify`. It builds its own copy of the site against a fake
   # Supabase (see playwright.config.ts), so it needs no real secrets.
   e2e:

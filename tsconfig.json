@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "hello-cdk"],
+     "exclude": ["dist", "hello-cdk", "coverage", "playwright-report", "test-results", "dist-e2e", "dist-server"],
   "compilerOptions": {
     "strictNullChecks": true
   }
