@@ -13,9 +13,12 @@
     "astro": "astro",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "docker:up": "docker compose up --build",
+    "docker:smoke": "node scripts/smoke.mjs",
     "build:static": "astro build",
     "build:server": "cross-env DEPLOY_TARGET=server astro build",
     "start:server": "cross-env HOST=0.0.0.0 PORT=4321 node ./dist/server/entry.mjs"
@@ -26,6 +29,7 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.5",
+    "docker": "^1.0.0",
     "sharp": "^0.35.0"
   },
   "allowScripts": {

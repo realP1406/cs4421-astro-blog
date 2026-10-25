@@ -1,0 +1,22 @@
+# Run the production image locally:   docker compose up --build
+# Needs a .env file next to this one (copy .env.example) with the two PUBLIC_SUPABASE_* values.
+services:
+  app:
+    build:
+      context: .
+      args:
+        PUBLIC_SUPABASE_URL: ${PUBLIC_SUPABASE_URL:?set PUBLIC_SUPABASE_URL in .env}
+        PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${PUBLIC_SUPABASE_PUBLISHABLE_KEY:?set PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env}
+        APP_VERSION: ${APP_VERSION:-dev}
+        GIT_SHA: ${GIT_SHA:-local}
+    image: astro-blog:${APP_VERSION:-dev}
+    ports:
+      - "4321:4321"
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    restart: unless-stopped
+    # The app needs no special permissions.
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
