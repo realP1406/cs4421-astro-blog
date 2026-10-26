@@ -175,7 +175,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy Infrastructure & Assets with AWS CDK
-        run: npx cdk deploy --require-approval never --outputs-file cdk-outputs.json
+        run: npx cdk deploy --all --require-approval never --outputs-file cdk-outputs.json
         working-directory: hello-cdk
 
       - name: Show deployed URL
