@@ -1,20 +1,27 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
+import { RegistryStack } from '../lib/registry-stack';
+import { ServiceStack } from '../lib/service-stack';
 import { StaticSiteStack } from '../lib/hello-cdk-stack';
 
 const app = new cdk.App();
-new StaticSiteStack(app, 'HelloCdkStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+// Account comes from whoever is running the command (your AWS login, or the CI credentials).
+// Everything lives in us-east-1, where CDK is already set up for this account.
+const env = { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-east-1' };
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  env: { account: '079457921243', region: 'us-east-1' },
+// Settings you can pass on the command line:  npx cdk deploy AstroBlogService -c imageTag=v1.0.0
+const imageTag: string = app.node.tryGetContext('imageTag') ?? 'v1.0.0';
+const repositoryName: string = app.node.tryGetContext('repositoryName') ?? 'astro-blog';
+const alarmEmail: string | undefined = app.node.tryGetContext('alarmEmail');
+const budgetEmail: string | undefined = app.node.tryGetContext('budgetEmail');
+const desiredCount = Number(app.node.tryGetContext('desiredCount') ?? 1);
 
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
-});
+// 1. The static website (S3 + CloudFront). Unchanged.
+new StaticSiteStack(app, 'HelloCdkStack', { env });
+
+// 2. The image registry (ECR). Deploy this first, then push an image.
+new RegistryStack(app, 'AstroBlogRegistry', { env, repositoryName, budgetEmail });
+
+// 3. The running container (ECS + load balancer + monitoring). Needs the image from step 2.
+new ServiceStack(app, 'AstroBlogService', { env, repositoryName, imageTag, desiredCount, alarmEmail });
