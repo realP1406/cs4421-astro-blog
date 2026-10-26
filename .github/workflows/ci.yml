@@ -141,7 +141,12 @@ jobs:
   deploy:
     name: Deploy with AWS CDK
     needs: [verify, e2e, docker]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: >-
+      (github.ref == 'refs/heads/main' && github.event_name != 'pull_request') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    concurrency:
+      group: cdk-deploy-${{ github.repository }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -174,14 +179,48 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Deploy Infrastructure & Assets with AWS CDK
-        run: npx cdk deploy --all --require-approval never --outputs-file cdk-outputs.json
+      - name: Deploy static site and ECR repository
+        run: npx cdk deploy HelloCdkStack AstroBlogRegistry --require-approval never --outputs-file infra-outputs.json
+        working-directory: hello-cdk
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push container image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg PUBLIC_SUPABASE_URL="$PUBLIC_SUPABASE_URL" \
+            --build-arg PUBLIC_SUPABASE_PUBLISHABLE_KEY="$PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
+            --build-arg APP_VERSION="$IMAGE_TAG" \
+            --build-arg GIT_SHA="$IMAGE_TAG" \
+            --tag "$ECR_REGISTRY/astro-blog:$IMAGE_TAG" \
+            .
+          docker push "$ECR_REGISTRY/astro-blog:$IMAGE_TAG"
+
+      - name: Deploy ECS service with the published image
+        run: npx cdk deploy AstroBlogService --context imageTag="$GITHUB_SHA" --require-approval never --outputs-file cdk-outputs.json
         working-directory: hello-cdk
 
       - name: Show deployed URL
         if: always()
         run: |
-          echo "### CDK outputs" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Static site and registry outputs" >> "$GITHUB_STEP_SUMMARY"
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          cat hello-cdk/cdk-outputs.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo '{}' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f hello-cdk/infra-outputs.json ]; then
+            cat hello-cdk/infra-outputs.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '{}' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "### ECS service outputs" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f hello-cdk/cdk-outputs.json ]; then
+            cat hello-cdk/cdk-outputs.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '{}' >> "$GITHUB_STEP_SUMMARY"
+          fi
           echo '```' >> "$GITHUB_STEP_SUMMARY"
