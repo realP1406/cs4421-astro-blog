@@ -12,7 +12,11 @@ export interface ObservabilityProps {
 	/** Log group the container writes its JSON log lines to. */
 	logGroup: logs.ILogGroup;
 	loadBalancer: elbv2.IApplicationLoadBalancer;
-	targetGroup: elbv2.IApplicationTargetGroup;
+	/**
+	 * Every target group the service can send traffic to. With blue/green deployments that is two (blue and
+	 * green) and the live one swaps on each release, so health must be watched on all of them.
+	 */
+	targetGroups: elbv2.IApplicationTargetGroup[];
 	service: ecs.FargateService;
 	/** Where alarm emails go. Leave out to create the topic without a subscriber. */
 	alarmEmail?: string;
@@ -28,12 +32,17 @@ export interface ObservabilityProps {
 export class Observability extends Construct {
 	public readonly topic: sns.Topic;
 	public readonly alarms: cloudwatch.Alarm[];
+	/** Fires on a burst of 5xx errors. ECS watches it during a deployment and rolls back if it fires. */
+	public readonly serverErrorsAlarm: cloudwatch.Alarm;
+	/** The same alarm's name as plain text (not a CloudFormation reference), safe to hand to the ECS service. */
+	public readonly serverErrorsAlarmName: string;
 	public readonly dashboard: cloudwatch.Dashboard;
 
 	constructor(scope: Construct, id: string, props: ObservabilityProps) {
 		super(scope, id);
 
 		const namespace = props.namespace ?? 'Bondwell';
+		this.serverErrorsAlarmName = `${namespace}-server-errors`;
 		const fiveMinutes = cdk.Duration.minutes(5);
 
 		// --- Notifications -----------------------------------------------------------------
@@ -70,11 +79,25 @@ export class Observability extends Construct {
 		});
 
 		// --- Alarms (five) -----------------------------------------------------------------
+		// Checked every minute (not every five) so a bad release is caught while it can still be rolled back.
+		const oneMinute = cdk.Duration.minutes(1);
 		const target5xx = props.loadBalancer.metrics.httpCodeTarget(elbv2.HttpCodeTarget.TARGET_5XX_COUNT, {
-			period: fiveMinutes,
+			period: oneMinute,
 			statistic: 'Sum',
 		});
-		const unhealthyHosts = props.targetGroup.metrics.unhealthyHostCount({ period: cdk.Duration.minutes(1), statistic: 'Maximum' });
+		if (props.targetGroups.length === 0) throw new Error('Observability needs at least one target group');
+		const unhealthyPerGroup = props.targetGroups.map((group) => group.metrics.unhealthyHostCount({ period: oneMinute, statistic: 'Maximum' }));
+		const healthyPerGroup = props.targetGroups.map((group) => group.metrics.healthyHostCount({ period: oneMinute, statistic: 'Minimum' }));
+		// One alarm for all groups: the worst (highest) unhealthy count in any of them.
+		const unhealthyHosts: cloudwatch.IMetric =
+			unhealthyPerGroup.length === 1
+				? unhealthyPerGroup[0]
+				: new cloudwatch.MathExpression({
+						expression: `MAX([${unhealthyPerGroup.map((_, index) => `u${index}`).join(',')}])`,
+						usingMetrics: Object.fromEntries(unhealthyPerGroup.map((metric, index) => [`u${index}`, metric])),
+						period: oneMinute,
+						label: 'Unhealthy tasks (any target group)',
+					});
 		const cpu = props.service.metricCpuUtilization({ period: fiveMinutes });
 		const errorLogs = logMetric('ErrorLogs');
 		const readinessProblems = logMetric('ReadinessProblems');
@@ -82,8 +105,8 @@ export class Observability extends Construct {
 		// No data means nothing is wrong (a quiet site logs no errors), so missing data never raises an alarm.
 		this.alarms = [
 			new cloudwatch.Alarm(this, 'Target5xxAlarm', {
-				alarmName: `${namespace}-server-errors`,
-				alarmDescription: 'The app returned 5 or more 5xx responses in 5 minutes. Check the log group for level=ERROR.',
+				alarmName: this.serverErrorsAlarmName,
+				alarmDescription: 'The app returned 5 or more 5xx responses within one minute. Also used to roll back a bad release. Check the log group for level=ERROR.',
 				metric: target5xx,
 				threshold: 5,
 				evaluationPeriods: 1,
@@ -129,6 +152,8 @@ export class Observability extends Construct {
 			}),
 		];
 
+		this.serverErrorsAlarm = this.alarms[0];
+
 		for (const alarm of this.alarms) {
 			const action = new cloudwatchActions.SnsAction(this.topic);
 			alarm.addAlarmAction(action);
@@ -158,11 +183,8 @@ export class Observability extends Construct {
 		);
 		this.dashboard.addWidgets(
 			new cloudwatch.GraphWidget({
-				title: 'Healthy and unhealthy tasks',
-				left: [
-					props.targetGroup.metrics.healthyHostCount({ period: cdk.Duration.minutes(1), statistic: 'Minimum' }),
-					unhealthyHosts,
-				],
+				title: 'Healthy and unhealthy tasks (each target group)',
+				left: [...healthyPerGroup, ...unhealthyPerGroup],
 				width: 12,
 			}),
 			new cloudwatch.GraphWidget({

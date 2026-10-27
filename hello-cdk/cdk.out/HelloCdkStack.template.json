@@ -170,7 +170,9 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
      "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
     },
     "Timeout": 900,
@@ -263,7 +265,9 @@
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
     "Content": {
-     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
      "S3Key": "98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip"
     },
     "Description": "/opt/awscli/aws"
@@ -285,10 +289,12 @@
      ]
     },
     "SourceBucketNames": [
-     "cdk-hnb659fds-assets-079457921243-us-east-1"
+     {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     }
     ],
     "SourceObjectKeys": [
-     "f62dd8e32c370c8fd42782d42cdb69ca3465e178c6a99c0e3bcbd198a66b4986.zip"
+     "5c4cbaa9419f52ad790297f1c622d147f7b30dff179b4e8c98da000a11fef6da.zip"
     ],
     "DestinationBucketName": {
      "Ref": "SiteBucket397A1860"
@@ -356,8 +362,29 @@
        ],
        "Effect": "Allow",
        "Resource": [
-        "arn:aws:s3:::cdk-hnb659fds-assets-079457921243-us-east-1",
-        "arn:aws:s3:::cdk-hnb659fds-assets-079457921243-us-east-1/*"
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+           },
+           "/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+           }
+          ]
+         ]
+        }
        ]
       },
       {
@@ -426,7 +453,9 @@
      "arm64"
     ],
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
      "S3Key": "35328da138f26fbd9160297abc9a2522d93dbf75878cd5114a9c050419fc1ce0.zip"
     },
     "Environment": {
@@ -486,7 +515,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/9VUTW/bMAz9LdWxUL0uGTAgtyTdhgHdGsTFLkFQKBKTqJXFQB/JPMH/fZBsuV7bFcVuOwSO+R71+GiKo2L08X1xecZO9oKLhwslN0UoHeMPlJ3sXbDjIsw8fwC3CsRAhUemFqgkr8mECLDOYE0oYd7hFShwcLO5B+4smTjjoVnT+Vb3+ZX8KTWZkKFYVLHjIkG2aKnTZ6c1a9pCrfYqkE16JRNyToYqPf5WrTahdMxBBXooNWMWVuSc0O63bihX6MXWoHZFuJLWGbnxTqJeBSJgy7xyM9izo0RDJoGgkbtUwzlpaCYsEV3rKtdejm8Scco5WDtH7QyqKJxsvYDF8FC9oXZ8FwQcFNbRQ+fsqg9QZi04W0zjo6GKVRvBijDf6mtWg/kBxkrUtJR6p8Ch/uw172x5L0UqlBJm+F464M4b6EIqplsyaasloI/SoI6SPSFKLbw5oM1JTlaAPjMMqgxUUKGpS/krB+CwhwoMU6VDw3YwgI4H/viv9BsNceZSwAL3Rrr6i0F/yMGtVGBr66DKleEuEbpXjiIfvWdaKDC5Pq9jwd1XDIQJ8Q0cE8yx1jeNg75+GUpTs6aDfv5LE//7hn0aWnpsTAteD+23Vzn3q6GSVUVYooLYOmt9BWJWx7t1MFJzeWBqyjn6vlUtJyZM0wn58lVMsx2IdNklRLXwR6yemo6by7rFRZbI+24VOtQ5xvdftZIaeqx39Cr4+rl/R1Nboi3aLbjoNovd4jLNxJManoeFGOy5oexbw6mMtoKGKtzZIlx3Y7EK/YR8Z/nzJ35mNA2de+uwWoJFb3i/XFtzXfAJZ2HwKAWYuIxp2l+lYzupd90Wu0u3546dLFeymJ7sXMk0Ua0NjQKKe/vuOPpQjC6Ly7N7K+VFN6LFsn3+BlEkia8EBwAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/9VVXW/TMBT9Lfhx8gK0SEh9aztASINV7cRLVVWufZt6c3wrf7QEK/8d2YmzsI1p4o2HKMk9xz733FzfjIrRx/fFuzfsbC+5uL9UcleElWP8nrKz3QY7LsLM83tw60AMVHhiaoFK8ppMiADrDNaEEuYdXoECBze7O+DOkokzHpoNne91v76SP6UmEzIUiyp2XCTIFi11+mS3ZkNbqNVeB7JLr2RCLshQpcdfq9UuWDnmoAI9lJoxC2tyQWh3bRrKFXqxN6hdEa6kdUbuvJOo14EI2DOv3AwO7CTRkEkgaGSZcrggDc2EJaJrXeXcV+ObRJxyDtbOUTuDKgonW89gMTxUb6gdb4OAo8I6euicXfUByqwFZ4tpvDVUsWonWBHme33NajA/wFiJmq6kLhU41J+95p0t76VIiVLCDD9IB9x5A11IxeWWTNpsCeiTNKijZE+IUgtvjmjzIicrQJ8ZBlUGKqjQ1Cv5KwfgeIAKDFMrh4aVMIBOR/7wtPI7DbHnUsAC90a6+otBf8zBvVRga+ugyplhmQjdK0eRtz4wLRSYnJ/XMeHuKwbChPgGjgnmWOubxkbfPA+lrtnQQT3/pYj/fcE+DS09FKYFr4f226Oc69VQyaoiLFFBLJ21vgIxq+PZOhqpuTwyNeUcfV+qlhMXTNMO+fBVTLMSRDrsEqJa+CNWT03HzWnd4iJL5Hm3Dh3qHOOHr1pJDT3WO3oRfHnfv6OpLNEW7QZcdJvFbnGZeuJRDk/DQgzm3FD2teGURptBQxWWtgjXXVusQ98h31n+/ImfGU1D5946rJZg0RveD9fWXBd8xFkYPEkBJg5jmubXyrFS6rKbYtt0erbsbLmSxfRs50qmjmptaBRQ3Nm3p9GHYhT/c3dWysuuRYtle/8NdkGsLgQHAAA="
    },
    "Metadata": {
     "aws:cdk:path": "HelloCdkStack/CDKMetadata/Default"
