@@ -3,8 +3,8 @@
     {
       "type": "aws:cdk:creationStack",
       "data": [
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)",
         "...node internals, tsx..."
       ]
     }
@@ -120,8 +120,8 @@
       "data": [
         "...new Bucket2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:11:24)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)",
         "...node internals, tsx..."
       ]
     },
@@ -182,8 +182,8 @@
       "data": [
         "...new Distribution2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:16:26)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)",
         "...node internals, tsx..."
       ]
     }
@@ -310,7 +310,7 @@
       "data": [
         "...new BucketDeployment2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:21:3)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)"
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)"
       ]
     }
   ],
@@ -345,8 +345,8 @@
       "data": [
         "...new Bucket2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:11:24)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)"
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)"
       ]
     },
     {
@@ -385,8 +385,8 @@
       "data": [
         "...new BucketDeployment2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:21:3)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)",
         "...node internals..."
       ]
     }
@@ -407,8 +407,8 @@
       "data": [
         "...new BucketDeployment2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:21:3)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)",
         "...node internals, tsx..."
       ]
     }
@@ -501,8 +501,8 @@
       "data": [
         "...new Distribution2 in aws-cdk-lib...",
         "new StaticSiteStack (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\lib\\hello-cdk-stack.ts:16:26)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:21:1)",
-        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:27:102)"
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:23:1)",
+        "<anonymous> (C:\\Users\\pH\\Documents\\ISE\\block 1\\Scrum_DevOps\\project\\CS4421\\lab\\my-astro-blog\\hello-cdk\\bin\\hello-cdk.ts:29:121)"
       ]
     }
   ],
