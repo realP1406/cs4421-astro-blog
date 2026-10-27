@@ -8,11 +8,11 @@
         "packaging": "zip"
       },
       "destinations": {
-        "current_account-us-east-1-e650c2de": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+        "079457921243-us-east-1-e53930f8": {
+          "bucketName": "cdk-hnb659fds-assets-079457921243-us-east-1",
           "objectKey": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip",
           "region": "us-east-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-file-publishing-role-079457921243-us-east-1"
         }
       }
     },
@@ -23,11 +23,11 @@
         "packaging": "file"
       },
       "destinations": {
-        "current_account-us-east-1-d165eabb": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+        "079457921243-us-east-1-02408b5d": {
+          "bucketName": "cdk-hnb659fds-assets-079457921243-us-east-1",
           "objectKey": "98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip",
           "region": "us-east-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-file-publishing-role-079457921243-us-east-1"
         }
       }
     },
@@ -38,11 +38,11 @@
         "packaging": "zip"
       },
       "destinations": {
-        "current_account-us-east-1-814bc0b8": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+        "079457921243-us-east-1-7f77a704": {
+          "bucketName": "cdk-hnb659fds-assets-079457921243-us-east-1",
           "objectKey": "35328da138f26fbd9160297abc9a2522d93dbf75878cd5114a9c050419fc1ce0.zip",
           "region": "us-east-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-file-publishing-role-079457921243-us-east-1"
         }
       }
     },
@@ -53,26 +53,26 @@
         "packaging": "zip"
       },
       "destinations": {
-        "current_account-us-east-1-a60ef11d": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+        "079457921243-us-east-1-4829b4f9": {
+          "bucketName": "cdk-hnb659fds-assets-079457921243-us-east-1",
           "objectKey": "5c4cbaa9419f52ad790297f1c622d147f7b30dff179b4e8c98da000a11fef6da.zip",
           "region": "us-east-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-file-publishing-role-079457921243-us-east-1"
         }
       }
     },
-    "9238bbb518c6cf595febfa411e1afa94d9b4de55fd018f8e168c38fe5e9b3c06": {
+    "d44988f762c09af1d2933d8791ba873633708d192a38187d9266c83f3e415101": {
       "displayName": "HelloCdkStack Template",
       "source": {
         "path": "HelloCdkStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-us-east-1-3f74ed86": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
-          "objectKey": "9238bbb518c6cf595febfa411e1afa94d9b4de55fd018f8e168c38fe5e9b3c06.json",
+        "079457921243-us-east-1-3bb158a7": {
+          "bucketName": "cdk-hnb659fds-assets-079457921243-us-east-1",
+          "objectKey": "d44988f762c09af1d2933d8791ba873633708d192a38187d9266c83f3e415101.json",
           "region": "us-east-1",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-file-publishing-role-079457921243-us-east-1"
         }
       }
     }

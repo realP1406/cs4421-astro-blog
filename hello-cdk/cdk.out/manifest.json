@@ -11,21 +11,21 @@
     },
     "HelloCdkStack": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://unknown-account/us-east-1",
+      "environment": "aws://079457921243/us-east-1",
       "properties": {
         "templateFile": "HelloCdkStack.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/9238bbb518c6cf595febfa411e1afa94d9b4de55fd018f8e168c38fe5e9b3c06.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-deploy-role-079457921243-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-cfn-exec-role-079457921243-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-079457921243-us-east-1/d44988f762c09af1d2933d8791ba873633708d192a38187d9266c83f3e415101.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "HelloCdkStack.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "arn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-lookup-role-079457921243-us-east-1",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -46,21 +46,21 @@
     },
     "AstroBlogRegistry": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://unknown-account/us-east-1",
+      "environment": "aws://079457921243/us-east-1",
       "properties": {
         "templateFile": "AstroBlogRegistry.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/ac3dadc301c298b573b5b76b543da9faf0d2ed20d26162cc4bc9de7c3c63e07b.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-deploy-role-079457921243-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-cfn-exec-role-079457921243-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-079457921243-us-east-1/ac3dadc301c298b573b5b76b543da9faf0d2ed20d26162cc4bc9de7c3c63e07b.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "AstroBlogRegistry.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "arn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-lookup-role-079457921243-us-east-1",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -81,21 +81,21 @@
     },
     "AstroBlogService": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://unknown-account/us-east-1",
+      "environment": "aws://079457921243/us-east-1",
       "properties": {
         "templateFile": "AstroBlogService.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/7c527f234fcd811ddae7d79cfa24eb63351bb6d5f7c3747817fd9576c0ba8847.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-deploy-role-079457921243-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-cfn-exec-role-079457921243-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-079457921243-us-east-1/59ead7798f5f84d850f2fd2f5098d91e1b9b93d97c3b94394f72bb64f3425253.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "AstroBlogService.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "arn": "arn:${AWS::Partition}:iam::079457921243:role/cdk-hnb659fds-lookup-role-079457921243-us-east-1",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }

@@ -170,9 +170,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-     },
+     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
      "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
     },
     "Timeout": 900,
@@ -265,9 +263,7 @@
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
     "Content": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-     },
+     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
      "S3Key": "98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip"
     },
     "Description": "/opt/awscli/aws"
@@ -289,9 +285,7 @@
      ]
     },
     "SourceBucketNames": [
-     {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-     }
+     "cdk-hnb659fds-assets-079457921243-us-east-1"
     ],
     "SourceObjectKeys": [
      "5c4cbaa9419f52ad790297f1c622d147f7b30dff179b4e8c98da000a11fef6da.zip"
@@ -362,29 +356,8 @@
        ],
        "Effect": "Allow",
        "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           "arn:aws:s3:::",
-           {
-            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-           },
-           "/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           "arn:aws:s3:::",
-           {
-            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-           }
-          ]
-         ]
-        }
+        "arn:aws:s3:::cdk-hnb659fds-assets-079457921243-us-east-1",
+        "arn:aws:s3:::cdk-hnb659fds-assets-079457921243-us-east-1/*"
        ]
       },
       {
@@ -453,9 +426,7 @@
      "arm64"
     ],
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
-     },
+     "S3Bucket": "cdk-hnb659fds-assets-079457921243-us-east-1",
      "S3Key": "35328da138f26fbd9160297abc9a2522d93dbf75878cd5114a9c050419fc1ce0.zip"
     },
     "Environment": {
