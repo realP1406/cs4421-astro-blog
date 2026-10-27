@@ -4,6 +4,10 @@ Bondwell is a bond portfolio dashboard built with Astro. Sign in to keep track o
 
 This app is part of the Block 1 Scrum/DevOps coursework for the ISE course at UL, alongside the project's weekly notes.
 
+## Architecture decision records
+
+The project rationale is recorded in the ADR set under [ADRs/README.md](./ADRs/README.md). Each record explains a decision, its context, the trade-offs, and the operational consequences for deployment and monitoring.
+
 ## Getting started
 
 1. Install dependencies with `npm install`.

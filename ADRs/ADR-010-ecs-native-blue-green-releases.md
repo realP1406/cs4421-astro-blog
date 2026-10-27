@@ -6,16 +6,18 @@ tasks only for a short bake time; after that, recovery requires deploying the ol
 CloudFormation and ECS starting tasks, instead of simply moving production traffic back to a known-good version.
 ## Decision
 We will run two independent ECS Fargate services, named blue and green, behind separate health-checked target groups and one
-Application Load Balancer. Each service keeps at least one task running. CI deploys the new immutable image to the color that is
-not currently receiving traffic, waits for ECS deployment stability and healthy targets, and then switches the listener to it.
+Application Load Balancer. Each service runs one task by default (or the configured desired count). CI deploys the new immutable
+image to the color that is not currently receiving traffic, waits for ECS deployment stability and healthy targets, and then
+switches the listener to it. CI verifies the newly served version after promotion and switches back if that check times out.
 The previously active service and image remain running as the rollback version. The `npm run rollback` command checks which
 color is active, verifies the other color has a healthy target, and changes the listener weights to route 100% of production
-traffic to that other color. It does not rebuild or redeploy the image. A failed candidate deployment is not promoted, and ECS's
-deployment circuit breaker restores the candidate service's prior task definition if its tasks fail to start.
+traffic to that other color. An operator can also choose a specific color with `npm run switch:traffic -- blue|green`. These
+commands only change ALB traffic weights; they do not rebuild or redeploy the image. A failed candidate deployment is not
+promoted, and ECS's deployment circuit breaker restores the candidate service's prior task definition if its tasks fail to start.
 ## Consequences
 - Positive: A rollback is a single command and only changes ALB weights, so it avoids image pulls, task startup, and a new CDK deployment.
 - Positive: Both target groups are health-checked, the services are monitored together, and immutable tags identify each retained version.
-- Negative: Keeping two Fargate tasks running roughly doubles the service's task compute cost.
+- Negative: Keeping two Fargate services running roughly doubles the service's task compute cost at the default desired count.
 - Negative: Manual traffic switches use the AWS ELBv2 API and can create CloudFormation drift; the listener rule must remain a
   weighted-forward rule containing both target groups. Verify the active color after any CDK change to the listener rule.
 - Negative: The existing ECS-native service stack must be destroyed and recreated once to adopt the two-service design, causing
