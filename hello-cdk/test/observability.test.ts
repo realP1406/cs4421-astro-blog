@@ -7,7 +7,9 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import { Observability } from '../lib/observability';
 
 // A minimal version of the real setup (ALB in front of a Fargate service), enough to attach monitoring to.
-function buildStack(alarmEmail?: string) {
+// groups = how many target groups to watch (the real stack has two: blue and green).
+function setup(options: { alarmEmail?: string; groups?: 0 | 1 | 2 } = {}) {
+	const groups = options.groups ?? 1;
 	const app = new cdk.App();
 	const stack = new cdk.Stack(app, 'TestStack');
 	const vpc = new ec2.Vpc(stack, 'Vpc', {
@@ -23,14 +25,29 @@ function buildStack(alarmEmail?: string) {
 	});
 	const service = new ecs.FargateService(stack, 'Service', { cluster, taskDefinition, assignPublicIp: true });
 	const loadBalancer = new elbv2.ApplicationLoadBalancer(stack, 'Alb', { vpc, internetFacing: true });
-	const targetGroup = loadBalancer
-		.addListener('Http', { port: 80 })
-		.addTargets('App', { port: 4321, protocol: elbv2.ApplicationProtocol.HTTP, targets: [service], healthCheck: { path: '/api/readyz' } });
+	const listener = loadBalancer.addListener('Http', { port: 80 });
+	const targetGroups: elbv2.IApplicationTargetGroup[] = [];
+	if (groups >= 1) {
+		targetGroups.push(
+			listener.addTargets('App', { port: 4321, protocol: elbv2.ApplicationProtocol.HTTP, targets: [service], healthCheck: { path: '/api/readyz' } }),
+		);
+	}
+	if (groups >= 2) {
+		const second = new elbv2.ApplicationTargetGroup(stack, 'Second', { vpc, port: 4321, protocol: elbv2.ApplicationProtocol.HTTP, targetType: elbv2.TargetType.IP });
+		listener.addAction('SecondRule', {
+			priority: 5,
+			conditions: [elbv2.ListenerCondition.pathPatterns(['/second*'])],
+			action: elbv2.ListenerAction.forward([second]),
+		});
+		targetGroups.push(second);
+	}
 	const logGroup = new logs.LogGroup(stack, 'Logs', { retention: logs.RetentionDays.ONE_WEEK });
 
-	new Observability(stack, 'Observability', { logGroup, loadBalancer, targetGroup, service, alarmEmail });
-	return Template.fromStack(stack);
+	const observability = new Observability(stack, 'Observability', { logGroup, loadBalancer, targetGroups, service, alarmEmail: options.alarmEmail });
+	return { template: Template.fromStack(stack), observability, stack };
 }
+
+const buildStack = (alarmEmail?: string) => setup({ alarmEmail }).template;
 
 describe('notifications', () => {
 	const template = buildStack('ops@example.com');
@@ -93,14 +110,20 @@ describe('alarms', () => {
 		for (const alarm of alarms) expect(alarm.Properties.TreatMissingData).toBe('notBreaching');
 	});
 
-	test('alarms on 5xx responses from the app', () => {
+	test('alarms on a burst of 5xx responses, measured every minute so a bad release is caught quickly', () => {
 		template.hasResourceProperties('AWS::CloudWatch::Alarm', {
 			MetricName: 'HTTPCode_Target_5XX_Count',
 			Namespace: 'AWS/ApplicationELB',
 			Threshold: 5,
 			EvaluationPeriods: 1,
-			Period: 300,
+			Period: 60,
 		});
+	});
+
+	test('exposes the 5xx alarm so a deployment can be rolled back when it fires', () => {
+		const { observability, template: built } = setup();
+		expect(observability.serverErrorsAlarm).toBe(observability.alarms[0]);
+		built.hasResourceProperties('AWS::CloudWatch::Alarm', { AlarmName: 'Bondwell-server-errors', MetricName: 'HTTPCode_Target_5XX_Count' });
 	});
 
 	test('alarms on unhealthy tasks for three minutes in a row', () => {
@@ -131,6 +154,39 @@ describe('alarms', () => {
 	test('every alarm has a description saying what to check', () => {
 		const alarms = Object.values(template.findResources('AWS::CloudWatch::Alarm'));
 		for (const alarm of alarms) expect(String(alarm.Properties.AlarmDescription).length).toBeGreaterThan(20);
+	});
+});
+
+describe('with blue/green there are two target groups, and the live one swaps on every release', () => {
+	const { template } = setup({ groups: 2 });
+	const unhealthyAlarm = () =>
+		Object.values(template.findResources('AWS::CloudWatch::Alarm')).find((alarm) => String(alarm.Properties.AlarmName ?? '').endsWith('unhealthy-hosts'))!;
+
+	test('still only five alarms', () => {
+		template.resourceCountIs('AWS::CloudWatch::Alarm', 5);
+	});
+
+	test('one unhealthy-tasks alarm covers both groups, using the higher of the two counts', () => {
+		const metrics = unhealthyAlarm().Properties.Metrics as Array<{ Expression?: string; MetricStat?: { Metric: { MetricName: string } } }>;
+		expect(metrics.some((metric) => metric.Expression === 'MAX([u0,u1])')).toBe(true);
+		const readings = metrics.filter((metric) => metric.MetricStat?.Metric.MetricName === 'UnHealthyHostCount');
+		expect(readings).toHaveLength(2);
+	});
+
+	test('keeps the same threshold and duration as the single-group alarm', () => {
+		expect(unhealthyAlarm().Properties).toMatchObject({ Threshold: 1, EvaluationPeriods: 3, TreatMissingData: 'notBreaching' });
+	});
+
+	test('the dashboard shows health for both groups', () => {
+		const dashboard = JSON.stringify(Object.values(template.findResources('AWS::CloudWatch::Dashboard'))[0]);
+		expect(dashboard).toContain('each target group');
+		expect((dashboard.match(/UnHealthyHostCount/g) ?? []).length).toBeGreaterThanOrEqual(2);
+	});
+});
+
+describe('bad input', () => {
+	test('refuses to be built without any target group, which would leave health unmonitored', () => {
+		expect(() => setup({ groups: 0 })).toThrow(/at least one target group/);
 	});
 });
 

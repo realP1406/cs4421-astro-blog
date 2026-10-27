@@ -19,9 +19,14 @@ export interface ServiceStackProps extends cdk.StackProps {
 }
 
 /**
- * The running app: a small Fargate service behind an Application Load Balancer.
+ * The running app: a small Fargate service behind an Application Load Balancer, released with
+ * ECS native BLUE/GREEN deployments.
  *
- *   Internet -> ALB (port 80) -> Fargate task (port 4321) -> logs in CloudWatch
+ *   Internet -> ALB (port 80) -> blue OR green target group -> Fargate task (port 4321) -> logs in CloudWatch
+ *
+ * A release starts the new version (green) next to the old one (blue). Traffic only moves once green passes
+ * the readiness check. The old version then keeps running for a short "bake time", so going back is just
+ * pointing the load balancer at it again. If green never gets healthy, or errors spike, ECS rolls back by itself.
  *
  * Cost choices: public subnets only and NO NAT Gateway (about $32 a month), one small task,
  * one ALB, logs kept for a week. See docs/aws-design.md.
@@ -89,8 +94,11 @@ export class ServiceStack extends cdk.Stack {
 			},
 		});
 
-		// --- The service: rolling deploys with automatic rollback ----------------------------
+		// --- The service: blue/green releases with automatic rollback ------------------------
 		this.service = new ecs.FargateService(this, 'Service', {
+			deploymentStrategy: ecs.DeploymentStrategy.BLUE_GREEN,
+			// After traffic moves to the new version, the old one stays up this long so rolling back is instant.
+			bakeTime: cdk.Duration.minutes(2),
 			cluster,
 			taskDefinition,
 			desiredCount: props.desiredCount ?? 1,
@@ -98,23 +106,25 @@ export class ServiceStack extends cdk.Stack {
 			// Its security group still only accepts traffic from the load balancer.
 			assignPublicIp: true,
 			vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-			// A new version starts and must pass health checks BEFORE the old one stops (zero downtime).
+			// Both versions run side by side during a release (zero downtime).
 			minHealthyPercent: 100,
 			maxHealthyPercent: 200,
-			// If the new version never becomes healthy, ECS stops the rollout and returns to the old one by itself.
+			// If the new tasks keep failing to start (for example the image is missing), stop and go back at once
+			// instead of waiting for hours.
 			circuitBreaker: { rollback: true },
 			healthCheckGracePeriod: cdk.Duration.seconds(30),
 		});
 
 		// --- Load balancer: port 80 for now (HTTPS comes in T7) -------------------------------
 		this.loadBalancer = new elbv2.ApplicationLoadBalancer(this, 'LoadBalancer', { vpc, internetFacing: true });
-		const listener = this.loadBalancer.addListener('Http', { port: 80, open: true });
 
-		const targetGroup = listener.addTargets('App', {
+		// Blue and green are identical. ECS decides which one the new tasks go into and which one is live.
+		const targetGroupSettings: elbv2.ApplicationTargetGroupProps = {
+			vpc,
 			port: 4321,
 			protocol: elbv2.ApplicationProtocol.HTTP,
-			targets: [this.service],
-			// Short on purpose: the default (300s) would make every deploy and rollback wait 5 minutes.
+			targetType: elbv2.TargetType.IP,
+			// Short on purpose: the default (300s) would make every release and rollback wait 5 minutes.
 			deregistrationDelay: cdk.Duration.seconds(15),
 			healthCheck: {
 				// Readiness, not liveness: a task that says "not ready" (starting, draining, bad config) gets no traffic.
@@ -125,16 +135,58 @@ export class ServiceStack extends cdk.Stack {
 				unhealthyThresholdCount: 2,
 				healthyHttpCodes: '200',
 			},
+		};
+		const blueTargetGroup = new elbv2.ApplicationTargetGroup(this, 'BlueTargetGroup', targetGroupSettings);
+		const greenTargetGroup = new elbv2.ApplicationTargetGroup(this, 'GreenTargetGroup', targetGroupSettings);
+
+		const listener = this.loadBalancer.addListener('Http', {
+			port: 80,
+			open: true,
+			// Never used: the production rule below catches every request.
+			defaultAction: elbv2.ListenerAction.fixedResponse(404, { contentType: 'text/plain', messageBody: 'Not found' }),
 		});
 
+		// ECS flips the weights on this rule during a release. AWS requires it to list BOTH target groups,
+		// with weight 100 on the live one and 0 on the other. Do not edit this rule by hand or in later code
+		// changes: ECS owns it after the first deploy.
+		const productionRule = new elbv2.ApplicationListenerRule(this, 'ProductionRule', {
+			listener,
+			priority: 1,
+			conditions: [elbv2.ListenerCondition.pathPatterns(['*'])],
+			action: elbv2.ListenerAction.weightedForward([
+				{ targetGroup: blueTargetGroup, weight: 100 },
+				{ targetGroup: greenTargetGroup, weight: 0 },
+			]),
+		});
+
+		const target = this.service.loadBalancerTarget({
+			containerName: 'app',
+			containerPort: 4321,
+			protocol: ecs.Protocol.TCP,
+			alternateTarget: new ecs.AlternateTarget('AlternateTarget', {
+				alternateTargetGroup: greenTargetGroup,
+				productionListener: ecs.ListenerRuleConfiguration.applicationListenerRule(productionRule),
+			}),
+		});
+		target.attachToApplicationTargetGroup(blueTargetGroup);
+
 		// --- Monitoring (built in T8) -------------------------------------------------------
-		new Observability(this, 'Observability', {
+		const observability = new Observability(this, 'Observability', {
 			logGroup,
 			loadBalancer: this.loadBalancer,
-			targetGroup,
+			targetGroups: [blueTargetGroup, greenTargetGroup],
 			service: this.service,
 			alarmEmail: props.alarmEmail,
 		});
+
+		// While a release is in progress (and during the bake time), ECS watches this alarm.
+		// If it fires, the release is rolled back automatically.
+		this.service.enableDeploymentAlarms([observability.serverErrorsAlarmName], {
+			behavior: ecs.AlarmBehavior.ROLLBACK_ON_ALARM,
+		});
+		// The alarm has to exist before the service asks about it. (The name above is plain text on purpose:
+		// a reference to the alarm can create a circular dependency in CloudFormation.)
+		this.service.node.addDependency(observability.serverErrorsAlarm);
 
 		cdk.Tags.of(this).add('Project', 'cs4421-astro-blog');
 
