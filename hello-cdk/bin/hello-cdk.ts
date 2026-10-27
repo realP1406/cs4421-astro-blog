@@ -10,8 +10,10 @@ const app = new cdk.App();
 // Everything lives in us-east-1, where CDK is already set up for this account.
 const env = { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-east-1' };
 
-// Settings you can pass on the command line:  npx cdk deploy AstroBlogService -c imageTag=v1.0.0
+// Settings you can pass on the command line:  npx cdk deploy AstroBlogService -c blueImageTag=v1.0.0 -c greenImageTag=abc1234
 const imageTag: string = app.node.tryGetContext('imageTag') ?? 'v1.0.0';
+const blueImageTag: string = app.node.tryGetContext('blueImageTag') ?? imageTag;
+const greenImageTag: string = app.node.tryGetContext('greenImageTag') ?? imageTag;
 const repositoryName: string = app.node.tryGetContext('repositoryName') ?? 'astro-blog';
 const alarmEmail: string | undefined = app.node.tryGetContext('alarmEmail');
 const budgetEmail: string | undefined = app.node.tryGetContext('budgetEmail');
@@ -24,4 +26,4 @@ new StaticSiteStack(app, 'HelloCdkStack', { env });
 new RegistryStack(app, 'AstroBlogRegistry', { env, repositoryName, budgetEmail });
 
 // 3. The running container (ECS + load balancer + monitoring). Needs the image from step 2.
-new ServiceStack(app, 'AstroBlogService', { env, repositoryName, imageTag, desiredCount, alarmEmail });
+new ServiceStack(app, 'AstroBlogService', { env, repositoryName, blueImageTag, greenImageTag, desiredCount, alarmEmail });

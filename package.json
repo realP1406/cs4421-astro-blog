@@ -19,6 +19,8 @@
     "test:e2e": "playwright test",
     "docker:up": "docker compose up --build",
     "docker:smoke": "node scripts/smoke.mjs",
+    "rollback": "node scripts/switch-traffic.mjs rollback",
+    "switch:traffic": "node scripts/switch-traffic.mjs",
     "build:static": "astro build",
     "build:server": "cross-env DEPLOY_TARGET=server astro build",
     "start:server": "cross-env HOST=0.0.0.0 PORT=4321 node ./dist/server/entry.mjs"

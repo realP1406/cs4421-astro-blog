@@ -1,6 +1,8 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const appVersion = process.env.APP_VERSION ?? 'dev';
 ---
 
 <!doctype html>
@@ -156,6 +158,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 				<a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true">b</span><span>bondwell</span></a>
 				<span>A little more clarity for your fixed income.</span>
 				<span>© {new Date().getFullYear()} Bondwell</span>
+				<span class="app-version">Version {appVersion}</span>
 			</footer>
 
 			<dialog id="bond-dialog" class="bond-dialog" aria-labelledby="bond-dialog-title">

@@ -7,7 +7,8 @@ function build(overrides: Partial<ServiceStackProps> = {}) {
 	const stack = new ServiceStack(app, 'Service', {
 		env: { account: '123456789012', region: 'us-east-1' },
 		repositoryName: 'astro-blog',
-		imageTag: 'v1.0.0',
+		blueImageTag: 'v1.0.0',
+		greenImageTag: 'v2.0.0',
 		alarmEmail: 'ops@example.com',
 		...overrides,
 	});
@@ -40,7 +41,7 @@ describe('network and cost guards', () => {
 
 	test('still works when the region is not known yet', () => {
 		const app = new cdk.App();
-		const stack = new ServiceStack(app, 'NoEnv', { repositoryName: 'astro-blog', imageTag: 'v1.0.0' });
+		const stack = new ServiceStack(app, 'NoEnv', { repositoryName: 'astro-blog', blueImageTag: 'v1.0.0', greenImageTag: 'v2.0.0' });
 		Template.fromStack(stack).resourceCountIs('AWS::EC2::Subnet', 2);
 	});
 
@@ -73,8 +74,15 @@ describe('container', () => {
 	});
 
 	test('uses whichever tag it is given', () => {
-		const other = only(build({ imageTag: 'abc1234' }), 'AWS::ECS::TaskDefinition').ContainerDefinitions[0];
+		const other = only(build({ blueImageTag: 'abc1234' }), 'AWS::ECS::TaskDefinition').ContainerDefinitions[0];
 		expect(JSON.stringify(other.Image)).toContain('/astro-blog:abc1234');
+	});
+
+	test('builds the second color from its own immutable image tag', () => {
+		const definitions = Object.values(build().findResources('AWS::ECS::TaskDefinition'));
+		expect(definitions.map((definition) => JSON.stringify(definition.Properties.ContainerDefinitions[0].Image))).toEqual(
+			expect.arrayContaining([expect.stringContaining('/astro-blog:v1.0.0'), expect.stringContaining('/astro-blog:v2.0.0')]),
+		);
 	});
 
 	test('listens on port 4321', () => {
@@ -83,7 +91,7 @@ describe('container', () => {
 
 	test('sends its logs to CloudWatch', () => {
 		expect(container.LogConfiguration.LogDriver).toBe('awslogs');
-		expect(container.LogConfiguration.Options['awslogs-stream-prefix']).toBe('app');
+		expect(container.LogConfiguration.Options['awslogs-stream-prefix']).toBe('blue');
 		expect(JSON.stringify(container.LogConfiguration.Options['awslogs-group'])).toContain('AppLogs');
 	});
 
@@ -99,27 +107,32 @@ describe('container', () => {
 
 describe('service', () => {
 	const template = build();
-	const service = only(template, 'AWS::ECS::Service');
+	const services = Object.values(template.findResources('AWS::ECS::Service')).map((resource) => resource.Properties);
 
-	test('runs one copy by default, or as many as asked', () => {
-		expect(service.DesiredCount).toBe(1);
-		expect(only(build({ desiredCount: 2 }), 'AWS::ECS::Service').DesiredCount).toBe(2);
+	test('keeps one copy of each color running, or as many as asked', () => {
+		expect(services).toHaveLength(2);
+		expect(services.map((service) => service.DesiredCount)).toEqual([1, 1]);
+		expect(Object.values(build({ desiredCount: 2 }).findResources('AWS::ECS::Service')).map((resource) => resource.Properties.DesiredCount)).toEqual([2, 2]);
 	});
 
-	test('lets both versions run side by side during a release (zero downtime)', () => {
-		expect(service.DeploymentConfiguration).toMatchObject({ MinimumHealthyPercent: 100, MaximumPercent: 200 });
+	test('runs both colors independently with zero-downtime rolling updates', () => {
+		for (const service of services) {
+			expect(service.DeploymentConfiguration).toMatchObject({ MinimumHealthyPercent: 100, MaximumPercent: 200 });
+		}
 	});
 
-	test('stops and goes back at once if new tasks keep failing to start (for example a missing image)', () => {
-		expect(service.DeploymentConfiguration.DeploymentCircuitBreaker).toEqual({ Enable: true, Rollback: true });
+	test('rolls back a failed service update if tasks keep failing to start', () => {
+		for (const service of services) {
+			expect(service.DeploymentConfiguration.DeploymentCircuitBreaker).toEqual({ Enable: true, Rollback: true });
+		}
 	});
 
 	test('gets a public address, since there is no NAT Gateway', () => {
-		expect(service.NetworkConfiguration.AwsvpcConfiguration.AssignPublicIp).toBe('ENABLED');
+		for (const service of services) expect(service.NetworkConfiguration.AwsvpcConfiguration.AssignPublicIp).toBe('ENABLED');
 	});
 
 	test('waits 30 seconds before judging the load balancer health check', () => {
-		expect(service.HealthCheckGracePeriodSeconds).toBe(30);
+		for (const service of services) expect(service.HealthCheckGracePeriodSeconds).toBe(30);
 	});
 });
 
@@ -192,31 +205,33 @@ function findCycle(resources: Record<string, { Properties?: unknown; DependsOn?:
 	return undefined;
 }
 
-describe('blue/green releases', () => {
+describe('persistent blue/green traffic switching', () => {
 	const template = build();
 	const resources = template.toJSON().Resources as Record<string, { Type: string; Properties: Record<string, any>; DependsOn?: string | string[] }>;
-	const service = only(template, 'AWS::ECS::Service');
 	const logicalId = (type: string, contains: string) =>
 		Object.entries(resources).find(([id, resource]) => resource.Type === type && id.includes(contains))![0];
 
-	test('uses ECS native blue/green, with the old version kept for a 2 minute bake time', () => {
-		expect(service.DeploymentConfiguration).toMatchObject({ Strategy: 'BLUE_GREEN', BakeTimeInMinutes: 2 });
+	test('creates two independent long-running ECS services', () => {
+		template.resourceCountIs('AWS::ECS::Service', 2);
+		const names = Object.values(resources)
+			.filter((resource) => resource.Type === 'AWS::ECS::Service')
+			.map((resource) => resource.Properties.ServiceName);
+		expect(JSON.stringify(names)).toContain('astro-blog-blue');
+		expect(JSON.stringify(names)).toContain('astro-blog-green');
 	});
 
-	test('rolls back by itself when the 5xx alarm fires during a release', () => {
-		expect(service.DeploymentConfiguration.Alarms).toEqual({ AlarmNames: ['Bondwell-server-errors'], Enable: true, Rollback: true });
-	});
-
-	test('the service waits for that alarm to exist before it starts', () => {
-		const alarmId = logicalId('AWS::CloudWatch::Alarm', 'Target5xxAlarm');
-		expect([resources[logicalId('AWS::ECS::Service', 'Service')].DependsOn].flat()).toContain(alarmId);
-	});
-
-	test('has exactly two target groups, blue and green, both for IP targets', () => {
+	test('creates exactly two health-checked target groups for IP targets', () => {
 		template.resourceCountIs('AWS::ElasticLoadBalancingV2::TargetGroup', 2);
 		const groups = Object.entries(resources).filter(([, resource]) => resource.Type === 'AWS::ElasticLoadBalancingV2::TargetGroup');
 		expect(groups.map(([id]) => id).sort()).toEqual([expect.stringContaining('Blue'), expect.stringContaining('Green')]);
 		for (const [, group] of groups) expect(group.Properties.TargetType).toBe('ip');
+	});
+
+	test('attaches each service to its own color target group', () => {
+		const services = Object.values(resources).filter((resource) => resource.Type === 'AWS::ECS::Service');
+		const loadBalancers = services.map((service) => service.Properties.LoadBalancers[0]);
+		expect(loadBalancers.map((target) => JSON.stringify(target.TargetGroupArn)).join(' ')).toContain('BlueTargetGroup');
+		expect(loadBalancers.map((target) => JSON.stringify(target.TargetGroupArn)).join(' ')).toContain('GreenTargetGroup');
 	});
 
 	test('blue and green are identical, and both check /api/readyz', () => {
@@ -229,16 +244,7 @@ describe('blue/green releases', () => {
 		}
 	});
 
-	test('the service starts in blue and is told about green as the alternate', () => {
-		const loadBalancer = service.LoadBalancers[0];
-		expect(loadBalancer).toMatchObject({ ContainerName: 'app', ContainerPort: 4321 });
-		expect(JSON.stringify(loadBalancer.TargetGroupArn)).toContain('BlueTargetGroup');
-		expect(JSON.stringify(loadBalancer.AdvancedConfiguration.AlternateTargetGroupArn)).toContain('GreenTargetGroup');
-		expect(JSON.stringify(loadBalancer.AdvancedConfiguration.ProductionListenerRule)).toContain('ProductionRule');
-		expect(loadBalancer.AdvancedConfiguration.RoleArn).toBeDefined();
-	});
-
-	test('the production rule catches every request and lists BOTH groups, 100 on blue and 0 on green (an AWS requirement)', () => {
+	test('the production rule forwards all traffic to blue initially and retains green as the standby target', () => {
 		template.resourceCountIs('AWS::ElasticLoadBalancingV2::ListenerRule', 1);
 		const rule = Object.values(resources).find((resource) => resource.Type === 'AWS::ElasticLoadBalancingV2::ListenerRule')!.Properties;
 		expect(rule.Priority).toBe(1);
@@ -255,13 +261,6 @@ describe('blue/green releases', () => {
 			Port: 80,
 			DefaultActions: [{ Type: 'fixed-response', FixedResponseConfig: { StatusCode: '404', ContentType: 'text/plain', MessageBody: 'Not found' } }],
 		});
-	});
-
-	test('ECS gets a role to move traffic between the groups, with the AWS-managed policy for it', () => {
-		const role = Object.values(resources).find(
-			(resource) => resource.Type === 'AWS::IAM::Role' && JSON.stringify(resource.Properties.AssumeRolePolicyDocument).includes('ecs.amazonaws.com') && JSON.stringify(resource.Properties.ManagedPolicyArns ?? []).includes('AmazonECSInfrastructureRolePolicyForLoadBalancers'),
-		);
-		expect(role).toBeDefined();
 	});
 
 	test('has no circular dependencies (CloudFormation would refuse to deploy it)', () => {
@@ -325,12 +324,14 @@ describe('logs and monitoring', () => {
 describe('outputs', () => {
 	test('shows the address and names needed after a deploy', () => {
 		const outputs = Object.keys(build().findOutputs('*'));
-		for (const name of ['ServiceUrl', 'ClusterName', 'ServiceName', 'LogGroupName', 'ImageDeployed']) {
+		for (const name of ['ServiceUrl', 'ClusterName', 'BlueServiceName', 'GreenServiceName', 'BlueTargetGroupArn', 'GreenTargetGroupArn', 'ProductionRuleArn', 'LogGroupName', 'BlueImageDeployed', 'GreenImageDeployed']) {
 			expect(outputs).toContain(name);
 		}
 	});
 
-	test('ImageDeployed says which image version is running', () => {
-		expect(build({ imageTag: 'v2.0.0' }).findOutputs('ImageDeployed').ImageDeployed.Value).toBe('astro-blog:v2.0.0');
+	test('outputs identify the immutable image tag deployed in each color', () => {
+		const outputs = build({ blueImageTag: 'v1.2.0', greenImageTag: 'abc1234' }).findOutputs('*');
+		expect(outputs.BlueImageDeployed.Value).toBe('astro-blog:v1.2.0');
+		expect(outputs.GreenImageDeployed.Value).toBe('astro-blog:abc1234');
 	});
 });

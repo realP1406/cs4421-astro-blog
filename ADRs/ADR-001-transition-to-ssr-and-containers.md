@@ -9,6 +9,6 @@ We will configure Astro with the `@astrojs/node` adapter in standalone mode and 
 as a Docker container. The server build is added next to the existing static build, not instead of it (ADR-002).
 ## Consequences
 - Positive: Enables live API routes, dynamic rendering, request logs and operational health checks.
-- Positive: Makes zero-downtime releases and automatic rollback possible (ADR-010).
+- Positive: Makes zero-downtime releases and fast operator-driven traffic rollback possible (ADR-010).
 - Negative: Increases operational complexity; requires a container compute runtime and about $10 a week of AWS spend.
 - Negative: The app's own features (sign-in, bond data) still run in the browser (ADR-013), so SSR adds operations features, not product features.

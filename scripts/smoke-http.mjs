@@ -72,8 +72,10 @@ export async function runHttpChecks({ baseUrl, expectVersion, startupTimeoutMs =
 
 	await check('home page returns HTML', async () => {
 		const response = await get('/');
+		const html = await response.text();
 		expect(response.status === 200, `HTTP ${response.status}`);
 		expect((response.headers.get('content-type') ?? '').includes('text/html'), 'not HTML');
+		if (expectVersion) expect(html.includes(`Version ${expectVersion}`), `home page does not display version "${expectVersion}"`);
 	});
 
 	await check('every response carries an x-request-id header', async () => {

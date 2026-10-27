@@ -43,7 +43,7 @@ function setup(options: { alarmEmail?: string; groups?: 0 | 1 | 2 } = {}) {
 	}
 	const logGroup = new logs.LogGroup(stack, 'Logs', { retention: logs.RetentionDays.ONE_WEEK });
 
-	const observability = new Observability(stack, 'Observability', { logGroup, loadBalancer, targetGroups, service, alarmEmail: options.alarmEmail });
+	const observability = new Observability(stack, 'Observability', { logGroup, loadBalancer, targetGroups, services: [service], alarmEmail: options.alarmEmail });
 	return { template: Template.fromStack(stack), observability, stack };
 }
 
@@ -120,7 +120,7 @@ describe('alarms', () => {
 		});
 	});
 
-	test('exposes the 5xx alarm so a deployment can be rolled back when it fires', () => {
+	test('exposes the 5xx alarm for operator alerts', () => {
 		const { observability, template: built } = setup();
 		expect(observability.serverErrorsAlarm).toBe(observability.alarms[0]);
 		built.hasResourceProperties('AWS::CloudWatch::Alarm', { AlarmName: 'Bondwell-server-errors', MetricName: 'HTTPCode_Target_5XX_Count' });
