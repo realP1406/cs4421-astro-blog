@@ -13,11 +13,10 @@ export interface ObservabilityProps {
 	logGroup: logs.ILogGroup;
 	loadBalancer: elbv2.IApplicationLoadBalancer;
 	/**
-	 * Every target group the service can send traffic to. With blue/green deployments that is two (blue and
-	 * green) and the live one swaps on each release, so health must be watched on all of them.
+	 * Every target group the service can send traffic to. Both blue and green stay active and must be watched.
 	 */
 	targetGroups: elbv2.IApplicationTargetGroup[];
-	service: ecs.FargateService;
+	services: ecs.FargateService[];
 	/** Where alarm emails go. Leave out to create the topic without a subscriber. */
 	alarmEmail?: string;
 	/** Namespace for the metrics made from log lines. */
@@ -32,9 +31,9 @@ export interface ObservabilityProps {
 export class Observability extends Construct {
 	public readonly topic: sns.Topic;
 	public readonly alarms: cloudwatch.Alarm[];
-	/** Fires on a burst of 5xx errors. ECS watches it during a deployment and rolls back if it fires. */
+	/** Fires on a burst of 5xx errors so operators can investigate and switch to the other color if needed. */
 	public readonly serverErrorsAlarm: cloudwatch.Alarm;
-	/** The same alarm's name as plain text (not a CloudFormation reference), safe to hand to the ECS service. */
+	/** The stable CloudWatch alarm name used by the 5xx alarm. */
 	public readonly serverErrorsAlarmName: string;
 	public readonly dashboard: cloudwatch.Dashboard;
 
@@ -79,7 +78,7 @@ export class Observability extends Construct {
 		});
 
 		// --- Alarms (five) -----------------------------------------------------------------
-		// Checked every minute (not every five) so a bad release is caught while it can still be rolled back.
+		// Checked every minute (not every five) so operators can react quickly to a bad release.
 		const oneMinute = cdk.Duration.minutes(1);
 		const target5xx = props.loadBalancer.metrics.httpCodeTarget(elbv2.HttpCodeTarget.TARGET_5XX_COUNT, {
 			period: oneMinute,
@@ -98,7 +97,27 @@ export class Observability extends Construct {
 						period: oneMinute,
 						label: 'Unhealthy tasks (any target group)',
 					});
-		const cpu = props.service.metricCpuUtilization({ period: fiveMinutes });
+		const cpuMetrics = props.services.map((service) => service.metricCpuUtilization({ period: fiveMinutes }));
+		if (cpuMetrics.length === 0) throw new Error('Observability needs at least one ECS service');
+		const cpu: cloudwatch.IMetric =
+			cpuMetrics.length === 1
+				? cpuMetrics[0]
+				: new cloudwatch.MathExpression({
+						expression: `MAX([${cpuMetrics.map((_, index) => `c${index}`).join(',')}])`,
+						usingMetrics: Object.fromEntries(cpuMetrics.map((metric, index) => [`c${index}`, metric])),
+						period: fiveMinutes,
+						label: 'CPU (either color)',
+					});
+		const memoryMetrics = props.services.map((service) => service.metricMemoryUtilization({ period: fiveMinutes }));
+		const memory: cloudwatch.IMetric =
+			memoryMetrics.length === 1
+				? memoryMetrics[0]
+				: new cloudwatch.MathExpression({
+						expression: `MAX([${memoryMetrics.map((_, index) => `m${index}`).join(',')}])`,
+						usingMetrics: Object.fromEntries(memoryMetrics.map((metric, index) => [`m${index}`, metric])),
+						period: fiveMinutes,
+						label: 'Memory (either color)',
+					});
 		const errorLogs = logMetric('ErrorLogs');
 		const readinessProblems = logMetric('ReadinessProblems');
 
@@ -106,7 +125,7 @@ export class Observability extends Construct {
 		this.alarms = [
 			new cloudwatch.Alarm(this, 'Target5xxAlarm', {
 				alarmName: this.serverErrorsAlarmName,
-				alarmDescription: 'The app returned 5 or more 5xx responses within one minute. Also used to roll back a bad release. Check the log group for level=ERROR.',
+				alarmDescription: 'The app returned 5 or more 5xx responses within one minute. Check the log group for level=ERROR and switch traffic to the other healthy color if needed.',
 				metric: target5xx,
 				threshold: 5,
 				evaluationPeriods: 1,
@@ -189,7 +208,7 @@ export class Observability extends Construct {
 			}),
 			new cloudwatch.GraphWidget({
 				title: 'Task CPU and memory (%)',
-				left: [cpu, props.service.metricMemoryUtilization({ period: fiveMinutes })],
+				left: [cpu, memory],
 				width: 12,
 			}),
 		);

@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -19,6 +20,8 @@ env:
   # Astro inlines PUBLIC_* values at build time, so they must exist during `npm run build`.
   PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
   PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+  APP_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+  GIT_SHA: ${{ github.sha }}
 
 jobs:
   verify:
@@ -29,6 +32,17 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release tag
+        if: github.ref_type == 'tag'
+        run: |
+          if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Release tags must use vMAJOR.MINOR.PATCH (for example v1.2.3)."
+            exit 1
+          fi
+        shell: bash
 
       - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
@@ -142,8 +156,8 @@ jobs:
     name: Deploy with AWS CDK
     needs: [verify, e2e, docker]
     if: >-
-      (github.ref == 'refs/heads/main' && github.event_name != 'pull_request') ||
-      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+      github.event_name != 'pull_request' &&
+      (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     concurrency:
       group: cdk-deploy-${{ github.repository }}
       cancel-in-progress: false
@@ -190,20 +204,120 @@ jobs:
       - name: Build and push container image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ env.APP_VERSION }}
         run: |
           docker build \
             --build-arg PUBLIC_SUPABASE_URL="$PUBLIC_SUPABASE_URL" \
             --build-arg PUBLIC_SUPABASE_PUBLISHABLE_KEY="$PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
             --build-arg APP_VERSION="$IMAGE_TAG" \
-            --build-arg GIT_SHA="$IMAGE_TAG" \
+            --build-arg GIT_SHA="$GIT_SHA" \
             --tag "$ECR_REGISTRY/astro-blog:$IMAGE_TAG" \
             .
           docker push "$ECR_REGISTRY/astro-blog:$IMAGE_TAG"
 
-      - name: Deploy ECS service with the published image
-        run: npx cdk deploy AstroBlogService --context imageTag="$GITHUB_SHA" --require-approval never --outputs-file cdk-outputs.json
+      - name: Choose the inactive color and retain the current image tags
+        id: release
+        shell: bash
+        run: |
+          trap 'rm -f stack-error.txt' EXIT
+          if ! stack_json=$(aws cloudformation describe-stacks --stack-name AstroBlogService --output json 2>stack-error.txt); then
+            if grep -Fq "does not exist" stack-error.txt; then
+              echo "initial=true" >> "$GITHUB_OUTPUT"
+              echo "candidate_color=none" >> "$GITHUB_OUTPUT"
+              echo "previous_color=blue" >> "$GITHUB_OUTPUT"
+              echo "blue_tag=$APP_VERSION" >> "$GITHUB_OUTPUT"
+              echo "green_tag=$APP_VERSION" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            cat stack-error.txt
+            exit 1
+          fi
+
+          output_value() {
+            jq -er --arg key "$1" '.Stacks[0].Outputs[] | select(.OutputKey == $key) | .OutputValue' <<< "$stack_json"
+          }
+          if ! blue_target=$(output_value BlueTargetGroupArn) ||
+             ! green_target=$(output_value GreenTargetGroupArn) ||
+             ! rule_arn=$(output_value ProductionRuleArn) ||
+             ! blue_image=$(output_value BlueImageDeployed) ||
+             ! green_image=$(output_value GreenImageDeployed); then
+            echo "::error::AstroBlogService is an older stack. Destroy and recreate it once to adopt the persistent blue/green design."
+            exit 1
+          fi
+
+          weights=$(aws elbv2 describe-rules --rule-arns "$rule_arn" --query 'Rules[0].Actions[0].ForwardConfig.TargetGroups' --output json)
+          blue_weight=$(jq -er --arg arn "$blue_target" '.[] | select(.TargetGroupArn == $arn) | .Weight' <<< "$weights")
+          green_weight=$(jq -er --arg arn "$green_target" '.[] | select(.TargetGroupArn == $arn) | .Weight' <<< "$weights")
+          if [[ "$blue_weight" == "100" && "$green_weight" == "0" ]]; then
+            active_color=blue
+            candidate_color=green
+          elif [[ "$green_weight" == "100" && "$blue_weight" == "0" ]]; then
+            active_color=green
+            candidate_color=blue
+          else
+            echo "::error::Listener weights are not a supported 100/0 blue-green configuration."
+            exit 1
+          fi
+
+          blue_tag="${blue_image##*:}"
+          green_tag="${green_image##*:}"
+          if [[ "$candidate_color" == "blue" ]]; then
+            blue_tag="$APP_VERSION"
+          else
+            green_tag="$APP_VERSION"
+          fi
+          echo "initial=false" >> "$GITHUB_OUTPUT"
+          echo "candidate_color=$candidate_color" >> "$GITHUB_OUTPUT"
+          echo "previous_color=$active_color" >> "$GITHUB_OUTPUT"
+          echo "blue_tag=$blue_tag" >> "$GITHUB_OUTPUT"
+          echo "green_tag=$green_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy the candidate image to the inactive ECS service
+        env:
+          BLUE_IMAGE_TAG: ${{ steps.release.outputs.blue_tag }}
+          GREEN_IMAGE_TAG: ${{ steps.release.outputs.green_tag }}
+        run: npx cdk deploy AstroBlogService --context blueImageTag="$BLUE_IMAGE_TAG" --context greenImageTag="$GREEN_IMAGE_TAG" --require-approval never --outputs-file cdk-outputs.json
         working-directory: hello-cdk
+
+      - name: Wait for ECS services and candidate health
+        id: services
+        env:
+          INITIAL_DEPLOY: ${{ steps.release.outputs.initial }}
+          CANDIDATE_COLOR: ${{ steps.release.outputs.candidate_color }}
+        run: |
+          output_value() {
+            jq -er --arg key "$1" '.Stacks[0].Outputs[] | select(.OutputKey == $key) | .OutputValue' <<< "$STACK_JSON"
+          }
+          STACK_JSON=$(aws cloudformation describe-stacks --stack-name AstroBlogService --output json)
+          CLUSTER_NAME=$(output_value ClusterName)
+          BLUE_SERVICE=$(output_value BlueServiceName)
+          GREEN_SERVICE=$(output_value GreenServiceName)
+          echo "service_url=$(output_value ServiceUrl)" >> "$GITHUB_OUTPUT"
+          aws ecs wait services-stable --cluster "$CLUSTER_NAME" --services "$BLUE_SERVICE" "$GREEN_SERVICE"
+          if [[ "$INITIAL_DEPLOY" != "true" ]]; then
+            TARGET_GROUP=$(output_value "${CANDIDATE_COLOR^}TargetGroupArn")
+            aws elbv2 wait target-in-service --target-group-arn "$TARGET_GROUP"
+          fi
+        shell: bash
+        working-directory: hello-cdk
+
+      - name: Promote the healthy candidate and verify the live version
+        env:
+          CANDIDATE_COLOR: ${{ steps.release.outputs.candidate_color }}
+          PREVIOUS_COLOR: ${{ steps.release.outputs.previous_color }}
+          INITIAL_DEPLOY: ${{ steps.release.outputs.initial }}
+          SERVICE_URL: ${{ steps.services.outputs.service_url }}
+          EXPECTED_VERSION: ${{ env.APP_VERSION }}
+        run: |
+          if [[ "$INITIAL_DEPLOY" != "true" ]]; then
+            node scripts/switch-traffic.mjs "$CANDIDATE_COLOR"
+          fi
+          if ! node scripts/wait-for-version.mjs "$SERVICE_URL" "$EXPECTED_VERSION" --timeout 120; then
+            if [[ "$INITIAL_DEPLOY" != "true" ]]; then
+              node scripts/switch-traffic.mjs "$PREVIOUS_COLOR"
+            fi
+            exit 1
+          fi
 
       - name: Show deployed URL
         if: always()

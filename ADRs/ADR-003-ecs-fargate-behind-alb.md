@@ -7,9 +7,11 @@ the release strategy), Lambda (needs a different adapter and is not a container 
 (the control plane alone costs about 17 USD a week).
 ## Decision
 We will run the image on ECS with Fargate (0.25 vCPU, 0.5 GB, x86) behind an Application Load Balancer.
-The ALB provides the health checks and the traffic switching that blue/green releases need.
+The ALB provides readiness health checks and weighted listener rules. Independent blue and green ECS services keep their
+versions running so a release can switch traffic without waiting for tasks to start.
 ## Consequences
 - Positive: No servers to manage; pay only for running tasks (about 2 USD a week per task).
-- Positive: Native support for blue/green, circuit breaker and alarm-based rollback.
+- Positive: ECS circuit breakers protect each service update; ALB traffic switching enables a fast rollback to the other service.
+- Negative: Two always-running tasks roughly double compute cost compared with one service.
 - Negative: The ALB is the largest fixed cost (about 5 USD a week) and cannot be turned off without taking the site down.
 - Negative: Ties the deployment to AWS-specific services.
